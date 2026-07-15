@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vayalada Bioblitz · 8–9 August 2026</title>
+<meta name="description" content="A 48-hour citizen science bioblitz at Vayalada, Kozhikode — documenting biodiversity through participatory science and supporting sustainable tourism.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&family=Noto+Sans+Malayalam:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#182B22;
+    --forest:#3C5B44;
+    --forest-dark:#28402F;
+    --sage:#7E9C82;
+    --mist:#EEF1E8;
+    --parchment:#F8F5EC;
+    --paper:#FFFEFA;
+    --laterite:#A44A2E;
+    --laterite-dark:#8A3C25;
+    --paddy:#C4972B;
+    --line: rgba(24,43,34,0.14);
+    --shadow: 0 10px 30px rgba(24,43,34,0.10);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Work Sans', sans-serif;
+    color:var(--ink);
+    background:var(--parchment);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    line-height:1.12;
+    margin:0 0 .5em;
+    letter-spacing:-0.01em;
+  }
+  .ml{ font-family:'Noto Sans Malayalam', sans-serif; }
+  p{margin:0 0 1em;}
+  a{color:inherit;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 24px;}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:12.5px; letter-spacing:.14em; text-transform:uppercase;
+    font-weight:600; color:var(--forest-dark);
+  }
+  .eyebrow::before{content:""; width:18px; height:1.5px; background:var(--laterite);}
+  section{padding:88px 0;}
+  @media (max-width:720px){ section{padding:60px 0;} }
+
+  /* ---------- NAV ---------- */
+  header.site{
+    position:sticky; top:0; z-index:50;
+    background:rgba(248,245,236,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    max-width:1120px; margin:0 auto; padding:14px 24px;
+  }
+  .brand{display:flex; align-items:center; gap:10px; font-family:'Fraunces',serif; font-weight:600; font-size:19px;}
+  .brand-mark{width:30px;height:30px;flex:none;}
+  .navlinks{display:flex; gap:26px; list-style:none; margin:0; padding:0; font-size:14.5px; font-weight:500;}
+  .navlinks a{text-decoration:none; opacity:.82; border-bottom:1px solid transparent; padding-bottom:2px;}
+  .navlinks a:hover{opacity:1; border-color:var(--laterite);}
+  .navcta{
+    background:var(--laterite); color:#fff; text-decoration:none;
+    padding:9px 18px; border-radius:100px; font-size:13.5px; font-weight:600;
+    white-space:nowrap;
+  }
+  .navcta:hover{background:var(--laterite-dark);}
+  .navtoggle{display:none; background:none; border:0; cursor:pointer;}
+  @media (max-width:880px){
+    .navlinks{display:none;}
+    .navtoggle{display:block;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative; overflow:hidden;
+    background:linear-gradient(180deg, #E8EEE2 0%, #DCE6D8 55%, var(--mist) 100%);
+    padding:64px 0 0;
+  }
+  .hero-inner{
+    max-width:1120px; margin:0 auto; padding:64px 24px 40px;
+    display:grid; grid-template-columns:1.15fr .85fr; gap:48px; align-items:center;
+  }
+  @media (max-width:880px){ .hero-inner{grid-template-columns:1fr; padding-top:20px;} }
+  .hero h1{font-size:clamp(38px,5.4vw,64px); margin-top:14px;}
+  .hero .ml{display:block; font-size:16px; color:var(--forest-dark); margin-top:6px; font-weight:500;}
+  .hero-sub{font-size:18px; max-width:52ch; color:#33473A; margin-top:16px;}
+  .hero-meta{display:flex; flex-wrap:wrap; gap:22px; margin:26px 0 30px;}
+  .hero-meta div{font-size:13.5px;}
+  .hero-meta strong{display:block; font-family:'Fraunces',serif; font-size:20px; font-weight:600;}
+  .hero-actions{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:14px 26px; border-radius:100px; text-decoration:none;
+    font-weight:600; font-size:15px; border:1.5px solid transparent; cursor:pointer;
+  }
+  .btn-primary{background:var(--laterite); color:#fff;}
+  .btn-primary:hover{background:var(--laterite-dark);}
+  .btn-ghost{border-color:var(--ink); color:var(--ink);}
+  .btn-ghost:hover{background:var(--ink); color:var(--paper);}
+  .btn[disabled], .btn.disabled{
+    background:#D8D2C2; color:#7A7361; cursor:not-allowed; border-color:transparent;
+  }
+  .hero-art{position:relative;}
+  .ridge{width:100%; height:auto;}
+  .badge-count{
+    background:var(--paper); border:1px solid var(--line); border-radius:16px;
+    padding:16px 18px; box-shadow:var(--shadow); position:absolute; bottom:-20px; left:-10px;
+    font-size:13px; max-width:210px;
+  }
+  .badge-count strong{font-family:'Fraunces',serif; font-size:26px; display:block; color:var(--laterite);}
+  @media (max-width:880px){ .badge-count{position:static; margin-top:16px;} }
+
+  .ridge-divider{display:block; width:100%; line-height:0;}
+  .ridge-divider svg{width:100%; height:auto; display:block;}
+
+  /* ---------- SECTION HEADS ---------- */
+  .sec-head{max-width:640px; margin-bottom:44px;}
+  .sec-head h2{font-size:clamp(28px,3.6vw,40px); margin-top:10px;}
+  .sec-head p{color:#3E5245; font-size:16.5px;}
+
+  /* ---------- ABOUT VAYALADA ---------- */
+  .about-grid{display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start;}
+  @media (max-width:880px){ .about-grid{grid-template-columns:1fr;} }
+  .stat-row{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:28px;}
+  .stat{background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:18px;}
+  .stat strong{display:block; font-family:'Fraunces',serif; font-size:24px; color:var(--forest-dark);}
+  .stat span{font-size:12.5px; color:#5B6B5F;}
+  .photo-slot{
+    border:1.5px dashed #A7B6A9; border-radius:16px; background:#E6EADF;
+    aspect-ratio:4/3; display:flex; align-items:center; justify-content:center;
+    text-align:center; color:#5C6B5F; font-size:13px; padding:20px;
+  }
+  .viewpoints{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:16px;}
+  @media (max-width:720px){ .viewpoints{grid-template-columns:1fr;} }
+  .vp-card{background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:20px;}
+  .vp-card h4{font-size:17px; margin-bottom:6px;}
+  .vp-card p{font-size:14px; color:#4A594D; margin:0;}
+  .icon{width:26px; height:26px; stroke:var(--forest-dark); fill:none; stroke-width:1.6; margin-bottom:10px;}
+
+  /* ---------- BIOBLITZ ---------- */
+  .bioblitz{background:var(--forest-dark); color:#F1F2EA;}
+  .bioblitz .sec-head p{color:#C9D3C6;}
+  .bioblitz .eyebrow{color:#D7C68F;}
+  .bioblitz .eyebrow::before{background:var(--paddy);}
+  .divisions{display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:32px;}
+  @media (max-width:880px){ .divisions{grid-template-columns:1fr;} }
+  .div-card{
+    background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.14);
+    border-radius:16px; padding:24px;
+  }
+  .div-card .tag{font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--paddy); font-weight:600;}
+  .div-card h4{font-size:19px; margin:10px 0 8px; color:#fff;}
+  .div-card p{font-size:14.5px; color:#CBD4C8; margin:0;}
+  .tally{
+    display:flex; flex-wrap:wrap; gap:12px; margin-top:36px;
+    border-top:1px solid rgba(255,255,255,0.16); padding-top:28px;
+  }
+  .tally-chip{
+    display:flex; align-items:center; gap:8px;
+    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.16);
+    padding:9px 16px; border-radius:100px; font-size:14px;
+  }
+  .tally-chip .icon{stroke:#F1F2EA; width:18px; height:18px; margin:0;}
+
+  /* ---------- EXPLORE ---------- */
+  .explore-grid{display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:10px;}
+  @media (max-width:880px){ .explore-grid{grid-template-columns:1fr;} }
+  .exp-card{background:var(--paper); border:1px solid var(--line); border-radius:16px; overflow:hidden;}
+  .exp-card .photo-slot{border-radius:0; border:0; border-bottom:1.5px dashed #A7B6A9; aspect-ratio:16/9;}
+  .exp-card .body{padding:20px 22px;}
+  .exp-card h4{font-size:18px; margin-bottom:6px;}
+  .exp-card p{font-size:14.5px; color:#4A594D; margin:0;}
+
+  /* ---------- REACH / FACILITIES ---------- */
+  .two-col{display:grid; grid-template-columns:1fr 1fr; gap:60px;}
+  @media (max-width:880px){ .two-col{grid-template-columns:1fr; gap:44px;} }
+  .reach-list, .fac-list{list-style:none; margin:0; padding:0;}
+  .reach-list li, .fac-list li{
+    display:flex; gap:14px; padding:16px 0; border-bottom:1px solid var(--line);
+  }
+  .reach-list li:first-child, .fac-list li:first-child{padding-top:0;}
+  .reach-list strong, .fac-list strong{display:block; font-size:15.5px;}
+  .reach-list span, .fac-list span{font-size:14px; color:#4A594D;}
+
+  /* ---------- COMMITTEE / SUPPORT ---------- */
+  .support-strip{
+    display:flex; flex-wrap:wrap; gap:14px; margin-top:28px;
+  }
+  .support-chip{
+    flex:1 1 200px; background:var(--paper); border:1px solid var(--line); border-radius:14px;
+    padding:20px; font-size:13.5px; font-weight:600; text-align:center;
+    display:flex; align-items:center; justify-content:center; min-height:78px;
+    color:#3E5245;
+  }
+  .partner-note{font-size:13.5px; color:#5B6B5F; margin-top:10px;}
+  .partner-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:16px;}
+  @media (max-width:720px){ .partner-grid{grid-template-columns:repeat(2,1fr);} }
+  .partner-slot{
+    border:1.5px dashed #A7B6A9; border-radius:14px; min-height:78px;
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    font-size:12.5px; color:#6B7A6E; padding:10px;
+  }
+  .committee-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-top:36px;}
+  @media (max-width:720px){ .committee-grid{grid-template-columns:1fr;} }
+  .member{
+    display:flex; gap:14px; align-items:flex-start; background:var(--paper);
+    border:1px solid var(--line); border-radius:14px; padding:18px;
+  }
+  .avatar{
+    width:44px; height:44px; border-radius:50%; flex:none;
+    background:var(--sage); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces',serif; font-weight:600; font-size:16px;
+  }
+  .member strong{display:block; font-size:15px;}
+  .member span{font-size:13px; color:#5B6B5F;}
+  .lead .avatar{background:var(--laterite);}
+
+  /* ---------- CONTACT ---------- */
+  .contact{background:var(--mist);}
+  .contact-grid{display:grid; grid-template-columns:1.1fr .9fr; gap:48px;}
+  @media (max-width:880px){ .contact-grid{grid-template-columns:1fr;} }
+  .contact-card{
+    background:var(--forest-dark); color:#fff; border-radius:20px; padding:36px;
+  }
+  .contact-card h3{color:#fff; font-size:24px;}
+  .contact-card p{color:#CBD4C8; font-size:14.5px;}
+  .contact-row{display:flex; gap:14px; align-items:flex-start; margin-top:20px;}
+  .contact-row .icon{stroke:#F1F2EA; margin-top:2px;}
+  .contact-row strong{display:block; font-size:15px; color:#fff;}
+  .contact-row span{font-size:14px; color:#C9D3C6;}
+  .reg-note{
+    background:var(--paper); border:1px dashed #A7B6A9; border-radius:16px;
+    padding:22px; font-size:14px; color:#4A594D; margin-top:22px;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--ink); color:#C9D3C6; padding:48px 0 28px; font-size:13.5px;}
+  .footer-grid{display:flex; justify-content:space-between; flex-wrap:wrap; gap:24px; align-items:center;}
+  footer a{color:#EEF1E8; text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.25);}
+  .footer-links{display:flex; gap:20px; flex-wrap:wrap; list-style:none; margin:0; padding:0;}
+  .footer-bottom{margin-top:28px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.12); font-size:12.5px; color:#8FA093;}
+
+  ::selection{background:var(--paddy); color:#1B2A20;}
+  :focus-visible{outline:2px solid var(--laterite); outline-offset:3px;}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <nav class="nav">
+    <a href="#top" class="brand">
+      <svg class="brand-mark" viewBox="0 0 32 32" fill="none" stroke="var(--forest-dark)" stroke-width="1.6">
+        <path d="M3 24 L12 10 L17 18 L21 12 L29 24 Z" stroke-linejoin="round"/>
+        <path d="M3 24 H29" stroke="var(--laterite)"/>
+      </svg>
+      Vayalada Bioblitz
+    </a>
+    <ul class="navlinks">
+      <li><a href="#about-vayalada">Vayalada</a></li>
+      <li><a href="#about-bioblitz">Bioblitz</a></li>
+      <li><a href="#explore">Explore</a></li>
+      <li><a href="#reach">Reach</a></li>
+      <li><a href="#facilities">Facilities</a></li>
+      <li><a href="#committee">Committee</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="navcta">Register interest</a>
+    <button class="navtoggle" id="navToggle" aria-label="Toggle menu">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </nav>
+  <ul class="navlinks" id="mobileMenu" style="display:none; flex-direction:column; padding:0 24px 18px; gap:14px;"></ul>
+</header>
+
+<main id="top">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <span class="eyebrow">48 hours · 8–9 August 2026</span>
+        <h1>Vayalada Bioblitz<span class="ml">വയലടയിലെ ജൈവവൈവിധ്യം</span></h1>
+        <p class="hero-sub">A community biodiversity survey on the misty hilltop of Vayalada — scientists, students and residents recording every plant, bird, moth and creature they can find, together. In support of participatory science and sustainable tourism for the Western Ghats.</p>
+        <div class="hero-meta">
+          <div><strong>Aug 8–9</strong>2026, 48 hours</div>
+          <div><strong>Vayalada</strong>Panangad Panchayat, Kozhikode</div>
+          <div><strong>~2,000 ft</strong>hilltop, Western Ghats</div>
+        </div>
+        <div class="hero-actions">
+          <a href="#contact" class="btn btn-primary">Register interest</a>
+          <a href="#about-bioblitz" class="btn btn-ghost">What's a bioblitz?</a>
+        </div>
+      </div>
+      <div class="hero-art">
+        <svg class="ridge" viewBox="0 0 480 380" fill="none">
+          <path d="M0 200 L60 140 L110 175 L150 100 L200 165 L250 90 L300 160 L350 120 L400 175 L480 130 V380 H0 Z" fill="#B9C9B4"/>
+          <path d="M0 250 L70 200 L130 235 L180 175 L230 225 L290 165 L340 220 L400 190 L480 230 V380 H0 Z" fill="#8FAE8D"/>
+          <path d="M0 300 L80 260 L140 290 L210 240 L270 285 L330 250 L400 285 L480 260 V380 H0 Z" fill="#3C5B44"/>
+          <g opacity="0.75">
+            <circle cx="120" cy="150" r="3" fill="#F8F5EC"/>
+            <circle cx="300" cy="110" r="2.4" fill="#F8F5EC"/>
+            <circle cx="380" cy="150" r="2" fill="#F8F5EC"/>
+          </g>
+        </svg>
+        <div class="badge-count"><strong>48 hrs</strong>of continuous observation across three habitat zones, from dawn birdsong to nocturnal moth counts.</div>
+      </div>
+    </div>
+    <div class="ridge-divider">
+      <svg viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0 40 Q300 10 600 35 T1200 30 V60 H0 Z" fill="var(--parchment)"/></svg>
+    </div>
+  </section>
+
+  <!-- ================= ABOUT VAYALADA ================= -->
+  <section id="about-vayalada">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">About the place</span>
+        <h2>Vayalada, the "Gavi of Malabar"</h2>
+        <p>A hilltop within Panangad Grama Panchayat, Kozhikode district — misty, green, and quietly spectacular, tucked against the edge of the Malabar Wildlife Sanctuary in the Western Ghats.</p>
+      </div>
+      <div class="about-grid">
+        <div>
+          <p>Known locally as the Gavi of Malabar, Vayalada sits about 2,000 ft above sea level, roughly 40 km from Kozhikode city and 12 km from Balussery. A trek of just over a kilometre climbs through forest and open slope to the top, where mist rolls in through the monsoon and panoramic views open up across the surrounding valleys.</p>
+          <p>Panangad Panchayat itself spans 47 sq. km of hills, valleys and paddy land, bordered by evergreen forest and lying within a UNESCO-recognised World Biodiversity Heritage region. It's this setting — forest meeting farmland, wildlife sanctuary meeting village — that makes Vayalada worth documenting closely, not just visiting.</p>
+          <div class="stat-row">
+            <div class="stat"><strong>~2,000 ft</strong><span>elevation above sea level</span></div>
+            <div class="stat"><strong>~1 km</strong><span>trek to the summit</span></div>
+            <div class="stat"><strong>47 sq. km</strong><span>Panangad Panchayat area</span></div>
+          </div>
+        </div>
+        <div class="photo-slot">Photo: Vayalada hilltop in monsoon mist<br><span style="font-size:11px;">— add image from bioregister.in / event gallery</span></div>
+      </div>
+
+      <div class="viewpoints">
+        <div class="vp-card">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M3 18 L9 8 L13 14 L16 10 L21 18 Z" stroke-linejoin="round"/></svg>
+          <h4>Mount Vayalada Viewpoint</h4>
+          <p>The main summit vantage, looking out over Peruvannamuzhi Dam and the surrounding forest.</p>
+        </div>
+        <div class="vp-card">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M8 12h8M12 8v8"/></svg>
+          <h4>Islands View, Mullanpara</h4>
+          <p>Views of small islands and reservoir backwaters formed by the dam below.</p>
+        </div>
+        <div class="vp-card">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M4 20 L10 6 L14 14 L18 4 L20 20 Z" stroke-linejoin="round"/></svg>
+          <h4>Kottakunnu Viewpoint</h4>
+          <p>Overlooks Koorachundu and Perambra towns spread across the valley floor.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ridge-divider"><svg viewBox="0 0 1200 40" preserveAspectRatio="none"><path d="M0 20 Q300 0 600 22 T1200 15 V40 H0 Z" fill="var(--forest-dark)"/></svg></div>
+
+  <!-- ================= ABOUT BIOBLITZ ================= -->
+  <section id="about-bioblitz" class="bioblitz">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">The event</span>
+        <h2>What is the Vayalada Bioblitz?</h2>
+        <p>A bioblitz is a race against the clock, run together: for a fixed window, researchers and residents fan out across a landscape and record every species they can find. Vayalada's edition runs for 48 hours, timed just before Onam — when flowering plants, reptiles and other wildlife are at their most active.</p>
+      </div>
+      <div class="divisions">
+        <div class="div-card">
+          <span class="tag">Division 01</span>
+          <h4>Documentation &amp; Technical</h4>
+          <p>About 50 academic experts, naturalists and software specialists compile field observations into a structured, mapped biodiversity record using modern data tools.</p>
+        </div>
+        <div class="div-card">
+          <span class="tag">Division 02</span>
+          <h4>Field &amp; Habitat</h4>
+          <p>Identifies biodiversity hotspots around Vayalada and schedules observation windows for birds, nocturnal species and other wildlife at the times they're most active.</p>
+        </div>
+        <div class="div-card">
+          <span class="tag">Division 03</span>
+          <h4>Community &amp; Outreach</h4>
+          <p>Teachers, students and citizen scientists with an interest in plants, birds, reptiles and mammals join the survey, learning field science hands-on.</p>
+        </div>
+      </div>
+      <div class="tally">
+        <div class="tally-chip"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3 C7 8 5 12 5 15 a7 7 0 0 0 14 0 c0-3-2-7-7-12Z"/></svg>Plants &amp; flowering species</div>
+        <div class="tally-chip"><svg class="icon" viewBox="0 0 24 24"><path d="M3 12 C7 6 17 6 21 12 C17 10 15 12 12 12 C9 12 7 10 3 12Z"/><circle cx="18" cy="9" r="1"/></svg>Birds</div>
+        <div class="tally-chip"><svg class="icon" viewBox="0 0 24 24"><path d="M12 4v16M12 8c-3-3-8-2-8 1s5 3 8 1M12 8c3-3 8-2 8 1s-5 3-8 1"/></svg>Butterflies &amp; moths</div>
+        <div class="tally-chip"><svg class="icon" viewBox="0 0 24 24"><path d="M3 14 Q8 6 14 12 Q19 17 21 10" /><circle cx="20" cy="9" r="1"/></svg>Reptiles &amp; amphibians</div>
+        <div class="tally-chip"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18" stroke-dasharray="2 3"/></svg>Nocturnal species</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= EXPLORE ================= -->
+  <section id="explore">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">While you're here</span>
+        <h2>Explore &amp; experience Vayalada</h2>
+        <p>Beyond the survey itself, Vayalada rewards a slower visit — best of all during the monsoon, when mist settles over the ridge and the whole hillside seems to breathe.</p>
+      </div>
+      <div class="explore-grid">
+        <div class="exp-card">
+          <div class="photo-slot">Photo: the summit trek<br><span style="font-size:11px;">— add image</span></div>
+          <div class="body"><h4>The summit trek</h4><p>A moderate, roughly 1 km climb through forest and open slope — steep in stretches, but manageable for most walkers with sturdy footwear.</p></div>
+        </div>
+        <div class="exp-card">
+          <div class="photo-slot">Photo: monsoon mist over the ridge<br><span style="font-size:11px;">— add image</span></div>
+          <div class="body"><h4>Monsoon mist</h4><p>Vayalada's signature moment: rolling cloud and mist through the rains, with a cool breeze that gives the hill its "Gavi of Malabar" reputation.</p></div>
+        </div>
+        <div class="exp-card">
+          <div class="photo-slot">Photo: guided bioblitz field walk<br><span style="font-size:11px;">— add image</span></div>
+          <div class="body"><h4>Guided field walks</h4><p>During the bioblitz, small groups move with naturalists and subject experts to spot and log species along marked routes.</p></div>
+        </div>
+        <div class="exp-card">
+          <div class="photo-slot">Photo: night walk / nocturnal survey<br><span style="font-size:11px;">— add image</span></div>
+          <div class="body"><h4>Night walks</h4><p>After dark, dedicated teams look for nocturnal and elusive species — moths, frogs and creatures rarely seen in daylight.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= HOW TO REACH + FACILITIES ================= -->
+  <section id="reach">
+    <div class="wrap two-col">
+      <div>
+        <div class="sec-head">
+          <span class="eyebrow">Getting here</span>
+          <h2>How to reach</h2>
+        </div>
+        <ul class="reach-list">
+          <li>
+            <svg class="icon" viewBox="0 0 24 24" style="stroke:var(--laterite)"><path d="M12 3 C7 3 5 7 5 11 c0 6 7 10 7 10s7-4 7-10c0-4-2-8-7-8Z"/><circle cx="12" cy="11" r="2.4"/></svg>
+            <div><strong>By road</strong><span>40 km from Kozhikode city; about 12 km from Balussery town, via local roads up to the Vayalada trailhead.</span></div>
+          </li>
+          <li>
+            <svg class="icon" viewBox="0 0 24 24" style="stroke:var(--laterite)"><rect x="5" y="4" width="14" height="13" rx="3"/><path d="M5 12h14M8 20l2-3h4l2 3"/></svg>
+            <div><strong>Nearest railway station</strong><span>Kozhikode, roughly 40 km away.</span></div>
+          </li>
+          <li>
+            <svg class="icon" viewBox="0 0 24 24" style="stroke:var(--laterite)"><path d="M3 15 L10 13 L14 3 L16 3 L14 13 L21 12 L21 14 L14 15 L15 21 L13 21 L11 16 L4 17 Z"/></svg>
+            <div><strong>Nearest airports</strong><span>Calicut International (Karipur), about 60 km; Kannur International, about 95 km.</span></div>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <div class="sec-head" id="facilities">
+          <span class="eyebrow">On the ground</span>
+          <h2>Facilities</h2>
+        </div>
+        <ul class="fac-list">
+          <li>
+            <svg class="icon" viewBox="0 0 24 24" style="stroke:var(--forest-dark)"><path d="M6 3v18M6 3c4 0 4 4 8 4M6 11c4 0 4 4 8 4"/></svg>
+            <div><strong>Food &amp; stay</strong><span>Arranged for registered participants for the duration of the 48-hour survey.</span></div>
+          </li>
+          <li>
+            <svg class="icon" viewBox="0 0 24 24" style="stroke:var(--forest-dark)"><circle cx="8" cy="8" r="3"/><circle cx="17" cy="8" r="3"/><path d="M2 20c0-3 3-5 6-5s6 2 6 5M13 20c0-2.5 2.2-4.5 5-4.5s5 2 5 4.5"/></svg>
+            <div><strong>Guided groups</strong><span>Field walks led by naturalists and subject experts across all three working divisions.</span></div>
+          </li>
+          <li>
+            <svg class="icon" viewBox="0 0 24 24" style="stroke:var(--forest-dark)"><path d="M4 20 L10 6 L14 14 L18 4 L20 20 Z" stroke-linejoin="round"/></svg>
+            <div><strong>Marked trails &amp; viewpoints</strong><span>The summit trek and all three viewpoints are part of the survey route.</span></div>
+          </li>
+          <li>
+            <svg class="icon" viewBox="0 0 24 24" style="stroke:var(--forest-dark)"><rect x="4" y="7" width="16" height="12" rx="2"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
+            <div><strong>Registration desk</strong><span>On-site check-in for participants, with local coordination support throughout the event.</span></div>
+          </li>
+        </ul>
+        <p class="partner-note">Facility details for general (non-participant) visitors should be confirmed with the Panchayat closer to the date.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="ridge-divider"><svg viewBox="0 0 1200 40" preserveAspectRatio="none"><path d="M0 20 Q300 40 600 18 T1200 25 V40 H0 Z" fill="var(--mist)"/></svg></div>
+
+  <!-- ================= COMMITTEE + SUPPORT ================= -->
+  <section id="committee" style="background:var(--mist);">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Who's behind it</span>
+        <h2>Organizing committee</h2>
+        <p>Coordinated locally by the Panangad Grama Panchayat, with a welcoming committee drawn from the panchayat and Vayalada community.</p>
+      </div>
+      <div class="committee-grid">
+        <div class="member lead">
+          <div class="avatar">VK</div>
+          <div><strong>V.M. Kamalakshi</strong><span>President, Panangad Grama Panchayat — Committee Chair</span></div>
+        </div>
+        <div class="member lead">
+          <div class="avatar">JN</div>
+          <div><strong>Jaisen Nedumbala</strong><span>Secretary, Panangad Grama Panchayat — Coordinator</span></div>
+        </div>
+        <div class="member">
+          <div class="avatar">GD</div>
+          <div><strong>P.P. Gauri Dileep Kumar</strong><span>Welcoming committee</span></div>
+        </div>
+        <div class="member">
+          <div class="avatar">SK</div>
+          <div><strong>C.K. Sathi Kumar</strong><span>Welcoming committee</span></div>
+        </div>
+        <div class="member">
+          <div class="avatar">KA</div>
+          <div><strong>K.K. Aravindakshan</strong><span>Vayalada, welcoming committee</span></div>
+        </div>
+        <div class="member">
+          <div class="avatar">SH</div>
+          <div><strong>Sakeer Hussain</strong><span>Welcoming committee</span></div>
+        </div>
+        <div class="member">
+          <div class="avatar">RH</div>
+          <div><strong>Raila Hameed</strong><span>Welcoming committee</span></div>
+        </div>
+        <div class="member lead">
+          <div class="avatar">MK</div>
+          <div><strong>Manoj Karingamadathil</strong><span>Sahya Digital Conservation Foundation — Science &amp; Tech Coordination</span></div>
+        </div>
+      </div>
+
+      <div style="margin-top:64px;">
+        <div class="sec-head">
+          <span class="eyebrow">Supported by</span>
+          <h2>Our supporting organizations</h2>
+        </div>
+        <div class="support-strip">
+          <div class="support-chip">Panangad Grama Panchayath</div>
+          <div class="support-chip">Biodiversity Management Committee, Panangad</div>
+          <div class="support-chip">Sahya Digital Conservation Foundation</div>
+          <div class="support-chip">Kerala State Biodiversity Board</div>
+          <div class="support-chip">Malabar Natural History Society</div>
+          <div class="support-chip">Samagatha Foundation</div>
+        </div>
+        <p class="partner-note">Logos to be added.</p>
+      </div>
+
+      <div style="margin-top:56px;">
+        <div class="sec-head">
+          <span class="eyebrow">Join us</span>
+          <h2>Community partners</h2>
+          <p>Space reserved for local groups, schools, clubs and businesses supporting the bioblitz.</p>
+        </div>
+        <div class="partner-grid">
+          <div class="partner-slot">Community partner</div>
+          <div class="partner-slot">Community partner</div>
+          <div class="partner-slot">Community partner</div>
+          <div class="partner-slot">Community partner</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT ================= -->
+  <section id="contact" class="contact">
+    <div class="wrap contact-grid">
+      <div>
+        <div class="sec-head">
+          <span class="eyebrow">Take part</span>
+          <h2>Register &amp; get in touch</h2>
+          <p>Whether you're a student, naturalist, researcher, or just curious about Vayalada's wildlife, there's a place for you in the survey.</p>
+        </div>
+        <div class="reg-note">
+          <strong style="display:block; margin-bottom:6px; font-family:'Fraunces',serif; font-size:16px;">Registration link coming soon</strong>
+          The online registration form will be linked here once it's live. In the meantime, reach out using the contact number alongside for registration and event queries.
+        </div>
+        <div class="hero-actions" style="margin-top:20px;">
+          <a href="#" class="btn disabled" aria-disabled="true">Register — opening soon</a>
+          <a href="tel:+919446163599" class="btn btn-ghost">Call to register: 9446163599</a>
+        </div>
+      </div>
+      <div class="contact-card">
+        <h3>Contact</h3>
+        <p>For registration, volunteering, or general queries about the Vayalada Bioblitz.</p>
+        <div class="contact-row">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M4 5h16v14H4Z"/><path d="M4 6l8 7 8-7"/></svg>
+          <div><strong>Registration &amp; info</strong><span>9446163599</span></div>
+        </div>
+        <div class="contact-row">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M12 3 C7 3 5 7 5 11 c0 6 7 10 7 10s7-4 7-10c0-4-2-8-7-8Z"/><circle cx="12" cy="11" r="2.4"/></svg>
+          <div><strong>Location</strong><span>Vayalada, Panangad Grama Panchayat, Balussery, Kozhikode District, Kerala</span></div>
+        </div>
+        <div class="contact-row">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>
+          <div><strong>Biodiversity records</strong><span>Panangad's ongoing People's Biodiversity Register at bioregister.in</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div style="max-width:360px;">
+        <strong style="font-family:'Fraunces',serif; font-size:18px; color:#fff;">Vayalada Bioblitz</strong>
+        <p style="margin-top:8px; color:#93A396;">8–9 August 2026 · Panangad Grama Panchayat, Kozhikode, Kerala</p>
+      </div>
+      <ul class="footer-links">
+        <li><a href="#about-vayalada">About Vayalada</a></li>
+        <li><a href="#about-bioblitz">About the Bioblitz</a></li>
+        <li><a href="#committee">Committee</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-bottom">
+      Organized with Panangad Grama Panchayath &amp; the Biodiversity Management Committee, Panangad. Part of Panangad's People's Biodiversity Register initiative, maintained by Sahya Digital Conservation Foundation.
+    </div>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.getElementById('navToggle');
+  const menu = document.getElementById('mobileMenu');
+  const links = document.querySelectorAll('.navlinks')[0];
+  if (links) { menu.innerHTML = links.innerHTML; }
+  toggle.addEventListener('click', () => {
+    menu.style.display = menu.style.display === 'none' ? 'flex' : 'none';
+  });
+  menu.addEventListener('click', (e) => {
+    if (e.target.tagName === 'A') menu.style.display = 'none';
+  });
+</script>
+
+</body>
+</html>
