@@ -89,7 +89,13 @@
     background:linear-gradient(180deg, #E8EEE2 0%, #DCE6D8 55%, var(--mist) 100%);
     padding:64px 0 0;
   }
+  .hero-spotlight{
+    position:absolute; inset:0; pointer-events:none; z-index:1; opacity:0;
+    background:radial-gradient(circle 300px at var(--sx, 50%) var(--sy, 50%), rgba(255,255,255,0.9), transparent 80%);
+    transition:opacity 500ms ease-out; will-change:opacity, background;
+  }
   .hero-inner{
+    position:relative; z-index:2;
     max-width:1120px; margin:0 auto; padding:64px 24px 40px;
     display:grid; grid-template-columns:1.15fr .85fr; gap:48px; align-items:center;
   }
@@ -340,6 +346,7 @@
     box-shadow: 0 12px 30px rgba(0,0,0,0.25), 0 0 20px rgba(255,255,255,0.14);
   }
   @media (prefers-reduced-motion: reduce){
+    .hero-spotlight { display: none !important; }
     .div-card, .tally-chip, .hero-meta div, .hero-meta strong, .sun-glow-group, .fog-layer-1, .fog-layer-2, [class^="p-"], .badge-count, .hero-seal, .mountain-back, .mountain-mid, .mountain-front, .hero-actions .btn, .hero-text, .hero-art{
       animation: none !important;
       opacity: 1 !important;
@@ -505,6 +512,7 @@
 
   <!-- ================= HERO ================= -->
   <section class="hero">
+    <div class="hero-spotlight" aria-hidden="true"></div>
     <div class="hero-inner">
       <div class="hero-text">
         <span class="eyebrow">48 hours · 8–9 August 2026</span>
@@ -932,21 +940,24 @@
     if (e.target.tagName === 'A') menu.style.display = 'none';
   });
 
-  // Layered Mouse Parallax for Hero Mountain Illustration
+  // Layered Mouse Parallax & Ambient Spotlight for Hero Section
   const heroSection = document.querySelector('.hero');
   const heroArt = document.querySelector('.hero-art');
+  const heroSpotlight = heroSection ? heroSection.querySelector('.hero-spotlight') : null;
   const isFinePointer = window.matchMedia('(pointer: fine)').matches;
   const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (heroSection && heroArt && isFinePointer && !isReducedMotion) {
-    const backMtn = heroArt.querySelector('.mountain-back');
-    const midMtn = heroArt.querySelector('.mountain-mid');
-    const frontMtn = heroArt.querySelector('.mountain-front');
-    const badgeCard = heroArt.querySelector('.badge-count');
-    const heroSeal = heroArt.querySelector('.hero-seal');
+  if (heroSection && isFinePointer && !isReducedMotion) {
+    const backMtn = heroArt ? heroArt.querySelector('.mountain-back') : null;
+    const midMtn = heroArt ? heroArt.querySelector('.mountain-mid') : null;
+    const frontMtn = heroArt ? heroArt.querySelector('.mountain-front') : null;
+    const badgeCard = heroArt ? heroArt.querySelector('.badge-count') : null;
+    const heroSeal = heroArt ? heroArt.querySelector('.hero-seal') : null;
 
     let targetX = 0, targetY = 0;
     let currentX = 0, currentY = 0;
+    let spotTargetX = 0, spotTargetY = 0;
+    let spotCurrentX = 0, spotCurrentY = 0;
 
     heroSection.addEventListener('mousemove', (e) => {
       const rect = heroSection.getBoundingClientRect();
@@ -954,14 +965,23 @@
       const centerY = rect.top + rect.height / 2;
       targetX = Math.max(-1, Math.min(1, (e.clientX - centerX) / (rect.width / 2)));
       targetY = Math.max(-1, Math.min(1, (e.clientY - centerY) / (rect.height / 2)));
+
+      if (heroSpotlight) {
+        spotTargetX = e.clientX - rect.left;
+        spotTargetY = e.clientY - rect.top;
+        heroSpotlight.style.opacity = '0.04';
+      }
     });
 
     heroSection.addEventListener('mouseleave', () => {
       targetX = 0;
       targetY = 0;
+      if (heroSpotlight) {
+        heroSpotlight.style.opacity = '0';
+      }
     });
 
-    function updateParallax() {
+    function updateHeroMotion() {
       currentX += (targetX - currentX) * 0.06;
       currentY += (targetY - currentY) * 0.06;
 
@@ -986,9 +1006,17 @@
         heroSeal.style.setProperty('--sy', `${currentY * -4}px`);
       }
 
-      requestAnimationFrame(updateParallax);
+      // Ambient Spotlight lerp
+      if (heroSpotlight) {
+        spotCurrentX += (spotTargetX - spotCurrentX) * 0.08;
+        spotCurrentY += (spotTargetY - spotCurrentY) * 0.08;
+        heroSpotlight.style.setProperty('--sx', `${spotCurrentX.toFixed(1)}px`);
+        heroSpotlight.style.setProperty('--sy', `${spotCurrentY.toFixed(1)}px`);
+      }
+
+      requestAnimationFrame(updateHeroMotion);
     }
-    requestAnimationFrame(updateParallax);
+    requestAnimationFrame(updateHeroMotion);
   }
 </script>
 
