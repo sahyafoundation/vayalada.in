@@ -158,9 +158,14 @@
     box-shadow: 0 8px 20px rgba(24,43,34,0.12);
   }
   .hero-actions .btn:active{
-    transform: translateY(0) scale(0.975);
-    box-shadow: 0 2px 6px rgba(24,43,34,0.10);
-    transition-duration: 100ms;
+    transform: translateY(0) scale(0.97);
+    transition: transform 110ms cubic-bezier(0.2, 0, 0, 1), box-shadow 110ms cubic-bezier(0.2, 0, 0, 1);
+  }
+  .hero-actions .btn-primary:active{
+    box-shadow: 0 3px 8px rgba(164,74,46,0.22);
+  }
+  .hero-actions .btn-ghost:active{
+    box-shadow: 0 3px 8px rgba(24,43,34,0.10);
   }
   .hero-actions .btn svg, .hero-actions .btn .icon{
     transition: transform 250ms ease-out;
@@ -170,6 +175,51 @@
   }
   .hero-art{position:relative;}
   .ridge{width:100%; height:auto;}
+
+  /* ---------- HERO ENTRANCE ANIMATION ---------- */
+  @keyframes heroTextEnter {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes heroBtnEnter {
+    0% {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes heroArtEnter {
+    0% {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1.0);
+    }
+  }
+
+  .hero-text {
+    animation: heroTextEnter 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .hero-actions .btn-primary {
+    animation: heroBtnEnter 500ms ease-out 180ms both;
+  }
+  .hero-actions .btn-ghost {
+    animation: heroBtnEnter 500ms ease-out 280ms both;
+  }
+  .hero-art {
+    animation: heroArtEnter 650ms ease-out 150ms both;
+  }
 
   /* ---------- HERO AMBIENT ANIMATIONS ---------- */
   @keyframes sunBreath {
@@ -197,12 +247,18 @@
     50% { transform: translate(14px, -30px); opacity: 0.80; }
   }
   @keyframes badgeFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
+    0%, 100% {
+      transform: translate3d(var(--px, 0px), calc(var(--py, 0px) + var(--hy, 0px)), 0) translateY(0);
+      box-shadow: var(--shadow);
+    }
+    50% {
+      transform: translate3d(var(--px, 0px), calc(var(--py, 0px) + var(--hy, 0px)), 0) translateY(-3px);
+      box-shadow: 0 14px 32px rgba(24,43,34,0.14);
+    }
   }
   @keyframes sealFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(6px); }
+    0%, 100% { transform: translate3d(var(--sx, 0px), var(--sy, 0px), 0) translateY(0); }
+    50% { transform: translate3d(var(--sx, 0px), var(--sy, 0px), 0) translateY(6px); }
   }
 
   .sun-glow-group {
@@ -233,8 +289,15 @@
   .badge-count{
     background:var(--paper); border:1px solid var(--line); border-radius:16px;
     padding:16px 18px; box-shadow:var(--shadow); position:absolute; bottom:-20px; left:-10px;
-    font-size:13px; max-width:210px;
-    animation: badgeFloat 5.5s ease-in-out infinite;
+    font-size:13px; max-width:210px; cursor:pointer;
+    animation: badgeFloat 4.5s ease-in-out infinite;
+    transition: box-shadow 250ms ease-out, filter 250ms ease-out, border-color 250ms ease-out;
+  }
+  .badge-count:hover{
+    --hy: -3px;
+    border-color: rgba(24,43,34,0.22);
+    box-shadow: 0 16px 36px rgba(24,43,34,0.16);
+    filter: brightness(1.03);
   }
   .badge-count strong{font-family:'Fraunces',serif; font-size:26px; display:block; color:var(--laterite);}
   @media (max-width:880px){ .badge-count{position:static; margin-top:16px;} }
@@ -284,8 +347,9 @@
     box-shadow: 0 12px 30px rgba(0,0,0,0.25), 0 0 20px rgba(255,255,255,0.14);
   }
   @media (prefers-reduced-motion: reduce){
-    .div-card, .tally-chip, .hero-meta div, .hero-meta strong, .sun-glow-group, .fog-layer-1, .fog-layer-2, [class^="p-"], .badge-count, .hero-seal, .mountain-back, .mountain-mid, .mountain-front, .hero-actions .btn{
+    .div-card, .tally-chip, .hero-meta div, .hero-meta strong, .sun-glow-group, .fog-layer-1, .fog-layer-2, [class^="p-"], .badge-count, .hero-seal, .mountain-back, .mountain-mid, .mountain-front, .hero-actions .btn, .hero-text, .hero-art{
       animation: none !important;
+      opacity: 1 !important;
       transform: none !important;
     }
     .div-card:hover, .tally-chip:hover, .hero-meta div:hover, .hero-meta div:hover strong, .hero-actions .btn:hover, .hero-actions .btn:active{
@@ -449,7 +513,7 @@
   <!-- ================= HERO ================= -->
   <section class="hero">
     <div class="hero-inner">
-      <div>
+      <div class="hero-text">
         <span class="eyebrow">48 hours · 8–9 August 2026</span>
         <h1>Vayalada Bioblitz<span class="ml">വയലടയിലെ ജൈവവൈവിധ്യം</span></h1>
         <p class="hero-sub">A community biodiversity survey on the misty hilltop of Vayalada — scientists, students and residents recording every plant, bird, moth and creature they can find, together. In support of participatory science and sustainable tourism for the Western Ghats.</p>
@@ -876,32 +940,59 @@
   });
 
   // Layered Mouse Parallax for Hero Mountain Illustration
+  const heroSection = document.querySelector('.hero');
   const heroArt = document.querySelector('.hero-art');
-  if (heroArt && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const isFinePointer = window.matchMedia('(pointer: fine)').matches;
+  const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (heroSection && heroArt && isFinePointer && !isReducedMotion) {
     const backMtn = heroArt.querySelector('.mountain-back');
     const midMtn = heroArt.querySelector('.mountain-mid');
     const frontMtn = heroArt.querySelector('.mountain-front');
-    let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
+    const badgeCard = heroArt.querySelector('.badge-count');
+    const heroSeal = heroArt.querySelector('.hero-seal');
 
-    const heroSection = document.querySelector('.hero');
-    (heroSection || heroArt).addEventListener('mousemove', (e) => {
-      const rect = (heroSection || heroArt).getBoundingClientRect();
+    let targetX = 0, targetY = 0;
+    let currentX = 0, currentY = 0;
+
+    heroSection.addEventListener('mousemove', (e) => {
+      const rect = heroSection.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
-      targetX = (e.clientX - centerX) / (rect.width / 2);
-      targetY = (e.clientY - centerY) / (rect.height / 2);
+      targetX = Math.max(-1, Math.min(1, (e.clientX - centerX) / (rect.width / 2)));
+      targetY = Math.max(-1, Math.min(1, (e.clientY - centerY) / (rect.height / 2)));
     });
 
-    (heroSection || heroArt).addEventListener('mouseleave', () => {
-      targetX = 0; targetY = 0;
+    heroSection.addEventListener('mouseleave', () => {
+      targetX = 0;
+      targetY = 0;
     });
 
     function updateParallax() {
-      currentX += (targetX - currentX) * 0.08;
-      currentY += (targetY - currentY) * 0.08;
-      if (backMtn) backMtn.style.transform = `translate(${currentX * 5}px, ${currentY * 2.5}px)`;
-      if (midMtn) midMtn.style.transform = `translate(${currentX * 10}px, ${currentY * 5}px)`;
-      if (frontMtn) frontMtn.style.transform = `translate(${currentX * 16}px, ${currentY * 8}px)`;
+      currentX += (targetX - currentX) * 0.06;
+      currentY += (targetY - currentY) * 0.06;
+
+      // Layer 1 — Background Mountains: opposite cursor, max H: 4px, V: 2px
+      if (backMtn) backMtn.style.transform = `translate3d(${currentX * -4}px, ${currentY * -2}px, 0)`;
+
+      // Layer 2 — Middle Mountains: max H: 6px, V: 3px
+      if (midMtn) midMtn.style.transform = `translate3d(${currentX * -6}px, ${currentY * -3}px, 0)`;
+
+      // Layer 3 — Foreground Elements: max H: 8px, V: 4px
+      if (frontMtn) frontMtn.style.transform = `translate3d(${currentX * -8}px, ${currentY * -4}px, 0)`;
+
+      // Floating "48 hrs" card: stronger response, max H: 8px, V: 8px
+      if (badgeCard) {
+        badgeCard.style.setProperty('--px', `${currentX * -8}px`);
+        badgeCard.style.setProperty('--py', `${currentY * -8}px`);
+      }
+
+      // Poster seal card
+      if (heroSeal) {
+        heroSeal.style.setProperty('--sx', `${currentX * -6}px`);
+        heroSeal.style.setProperty('--sy', `${currentY * -4}px`);
+      }
+
       requestAnimationFrame(updateParallax);
     }
     requestAnimationFrame(updateParallax);
