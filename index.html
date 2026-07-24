@@ -1053,6 +1053,38 @@
     }
     requestAnimationFrame(updateHeroMotion);
   }
+
+  // Smooth scroll handler for CTA & anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const targetId = this.getAttribute('href');
+      if (targetId && targetId !== '#') {
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          e.preventDefault();
+          targetElement.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
+  });
+
+  // IntersectionObserver Scroll Reveal for #about-bioblitz
+  const bioblitzSec = document.getElementById('about-bioblitz');
+  if (bioblitzSec) {
+    if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('bioblitz-reveal');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      observer.observe(bioblitzSec);
+    } else {
+      bioblitzSec.classList.add('bioblitz-reveal');
+    }
+  }
 </script>
 
 </body>
