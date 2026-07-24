@@ -345,9 +345,44 @@
     border-color: rgba(255,255,255,0.30);
     box-shadow: 0 12px 30px rgba(0,0,0,0.25), 0 0 20px rgba(255,255,255,0.14);
   }
+  /* ---------- SCROLL REVEAL (WHAT'S A BIOBLITZ) ---------- */
+  @keyframes secHeadReveal {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes divCardReveal {
+    0% {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .bioblitz-reveal .sec-head {
+    animation: secHeadReveal 550ms ease-out both;
+  }
+  .bioblitz-reveal .div-card:nth-child(1) {
+    animation: divCardReveal 500ms ease-out 150ms both;
+  }
+  .bioblitz-reveal .div-card:nth-child(2) {
+    animation: divCardReveal 500ms ease-out 250ms both;
+  }
+  .bioblitz-reveal .div-card:nth-child(3) {
+    animation: divCardReveal 500ms ease-out 350ms both;
+  }
+
   @media (prefers-reduced-motion: reduce){
     .hero-spotlight { display: none !important; }
-    .div-card, .tally-chip, .hero-meta div, .hero-meta strong, .sun-glow-group, .fog-layer-1, .fog-layer-2, [class^="p-"], .badge-count, .hero-seal, .mountain-back, .mountain-mid, .mountain-front, .hero-actions .btn, .hero-text, .hero-art{
+    .div-card, .tally-chip, .hero-meta div, .hero-meta strong, .sun-glow-group, .fog-layer-1, .fog-layer-2, [class^="p-"], .badge-count, .hero-seal, .mountain-back, .mountain-mid, .mountain-front, .hero-actions .btn, .hero-text, .hero-art, .bioblitz-reveal .sec-head, .bioblitz-reveal .div-card{
       animation: none !important;
       opacity: 1 !important;
       transform: none !important;
