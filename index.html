@@ -248,11 +248,11 @@
   }
   @keyframes badgeFloat {
     0%, 100% {
-      transform: translate3d(var(--px, 0px), calc(var(--py, 0px) + var(--hy, 0px)), 0) translateY(0);
+      transform: translate3d(var(--px, 0px), var(--py, 0px), 0) translateY(0);
       box-shadow: var(--shadow);
     }
     50% {
-      transform: translate3d(var(--px, 0px), calc(var(--py, 0px) + var(--hy, 0px)), 0) translateY(-3px);
+      transform: translate3d(var(--px, 0px), var(--py, 0px), 0) translateY(-3px);
       box-shadow: 0 14px 32px rgba(24,43,34,0.14);
     }
   }
@@ -289,15 +289,8 @@
   .badge-count{
     background:var(--paper); border:1px solid var(--line); border-radius:16px;
     padding:16px 18px; box-shadow:var(--shadow); position:absolute; bottom:-20px; left:-10px;
-    font-size:13px; max-width:210px; cursor:pointer;
+    font-size:13px; max-width:210px;
     animation: badgeFloat 4.5s ease-in-out infinite;
-    transition: box-shadow 250ms ease-out, filter 250ms ease-out, border-color 250ms ease-out;
-  }
-  .badge-count:hover{
-    --hy: -3px;
-    border-color: rgba(24,43,34,0.22);
-    box-shadow: 0 16px 36px rgba(24,43,34,0.16);
-    filter: brightness(1.03);
   }
   .badge-count strong{font-family:'Fraunces',serif; font-size:26px; display:block; color:var(--laterite);}
   @media (max-width:880px){ .badge-count{position:static; margin-top:16px;} }
