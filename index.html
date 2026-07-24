@@ -98,8 +98,37 @@
   .hero .ml{display:block; font-size:16px; color:var(--forest-dark); margin-top:6px; font-weight:500;}
   .hero-sub{font-size:18px; max-width:52ch; color:#33473A; margin-top:16px;}
   .hero-meta{display:flex; flex-wrap:wrap; gap:22px; margin:26px 0 30px;}
-  .hero-meta div{font-size:13.5px;}
-  .hero-meta strong{display:block; font-family:'Fraunces',serif; font-size:20px; font-weight:600;}
+  .hero-meta div{
+    font-size:13.5px;
+    color:#4A594D;
+    padding:10px 14px;
+    margin:-10px -14px;
+    border-radius:12px;
+    border:1px solid transparent;
+    cursor:pointer;
+    transition: transform 250ms ease-out, box-shadow 250ms ease-out, background 250ms ease-out, border-color 250ms ease-out, color 250ms ease-out;
+  }
+  .hero-meta strong{
+    display:block;
+    font-family:'Fraunces',serif;
+    font-size:20px;
+    font-weight:600;
+    color:var(--ink);
+    transition: color 250ms ease-out, transform 250ms ease-out;
+  }
+  @media (hover: hover){
+    .hero-meta div:hover{
+      transform: translateY(-4px);
+      background: var(--paper);
+      border-color: var(--line);
+      box-shadow: 0 10px 24px rgba(24,43,34,0.08), 0 2px 6px rgba(24,43,34,0.04);
+      color: var(--ink);
+    }
+    .hero-meta div:hover strong{
+      color: var(--laterite);
+      transform: translateY(-1px);
+    }
+  }
   .hero-actions{display:flex; gap:14px; flex-wrap:wrap;}
   .btn{
     display:inline-flex; align-items:center; gap:8px;
@@ -168,10 +197,10 @@
     box-shadow: 0 12px 30px rgba(0,0,0,0.25), 0 0 20px rgba(255,255,255,0.14);
   }
   @media (prefers-reduced-motion: reduce){
-    .div-card, .tally-chip{
+    .div-card, .tally-chip, .hero-meta div, .hero-meta strong{
       transition: none;
     }
-    .div-card:hover, .tally-chip:hover{
+    .div-card:hover, .tally-chip:hover, .hero-meta div:hover, .hero-meta div:hover strong{
       transform: none;
     }
   }
