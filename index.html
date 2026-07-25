@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&family=Noto+Sans+Malayalam:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
   :root{
     --ink:#182B22;
@@ -452,6 +453,62 @@
   .reach-list strong, .fac-list strong{display:block; font-size:15.5px;}
   .reach-list span, .fac-list span{font-size:14px; color:#4A594D;}
 
+  /* ---------- REACH MAP ---------- */
+  .reach-map{margin-top:56px;}
+  .reach-map .sec-head{margin-bottom:28px;}
+  .reach-map .sec-head p{color:#4A594D; font-size:14.5px;}
+  .reach-map-grid{display:grid; grid-template-columns:1.6fr 1fr; gap:28px; align-items:start;}
+  @media (max-width:880px){ .reach-map-grid{grid-template-columns:1fr;} }
+  .reach-map-canvas{z-index: -1;position:relative; height:440px; border-radius:18px; border:1px solid var(--line); box-shadow:var(--shadow); overflow:hidden; background:var(--paper);}
+  .reach-map-canvas .leaflet-container{font-family:'Work Sans', sans-serif; background:var(--mist);}
+  .reach-map-canvas .leaflet-popup-content-wrapper{border-radius:12px; box-shadow:var(--shadow);}
+  .reach-map-canvas .leaflet-popup-content{font-size:13.5px; color:var(--ink); margin:10px 14px;}
+  .reach-map-canvas .leaflet-popup-content strong{font-family:'Fraunces',serif; font-size:15px; display:block; margin-bottom:2px;}
+  .reach-map-canvas .leaflet-attribution-flag{display:none !important;}
+  .reach-pin-label{font-family:'Work Sans', sans-serif; font-weight:600; font-size:12.5px; color:var(--laterite-dark); background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:2px 8px; box-shadow:var(--shadow);}
+  .reach-pin-label::before{border:none;}
+
+  .reach-map-ctrl{background:var(--paper); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); overflow:hidden;}
+  .reach-map-ctrl button{
+    display:flex; align-items:center; justify-content:center; width:34px; height:34px;
+    border:0; background:none; color:var(--forest-dark); cursor:pointer; padding:0;
+    border-bottom:1px solid var(--line);
+  }
+  .reach-map-ctrl button:last-child{border-bottom:0;}
+  .reach-map-ctrl button:hover{background:var(--mist);}
+  .reach-map-locate{
+    margin-top:8px; width:34px; height:34px; display:flex; align-items:center; justify-content:center;
+    background:var(--paper); border:1px solid var(--line); border-radius:50%; box-shadow:var(--shadow);
+    color:var(--laterite); cursor:pointer; padding:0;
+  }
+  .reach-map-locate:hover{background:var(--mist);}
+  .reach-map-ctrl svg, .reach-map-locate svg{width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:1.8;}
+
+  .reach-map-legend{background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:22px;}
+  .reach-map-legend h4{font-family:'Fraunces',serif; font-size:16px; margin:0 0 14px;}
+  .route-row{display:flex; gap:12px; padding:14px 0; border-bottom:1px solid var(--line);}
+  .route-row:last-child{border-bottom:0; padding-bottom:0;}
+  .route-row:first-child{padding-top:0;}
+  .route-row input[type="checkbox"]{width:17px; height:17px; margin-top:3px; flex:0 0 auto; accent-color:var(--forest);}
+  .route-row .swatch{width:11px; height:11px; border-radius:50%; display:inline-block; margin-right:6px; flex:0 0 auto;}
+  .route-row .route-body{flex:1; min-width:0;}
+  .route-row label{cursor:pointer;}
+  .route-row strong{display:flex; align-items:center; font-size:14.5px;}
+  .route-row .route-desc{display:block; font-size:13px; color:#4A594D; margin-top:2px;}
+  .route-row .route-meta{display:flex; align-items:center; justify-content:space-between; margin-top:8px; gap:10px;}
+  .route-row .route-dist{font-size:13px; font-weight:600; color:var(--forest-dark);}
+  .route-row a.route-directions{
+    font-size:12.5px; font-weight:600; color:#fff; background:var(--laterite); text-decoration:none;
+    padding:6px 12px; border-radius:100px; white-space:nowrap;
+  }
+  .route-row a.route-directions:hover{background:var(--laterite-dark);}
+  .reach-map-note{font-size:12.5px; color:#5B6B5F; margin-top:16px;}
+
+  @media (prefers-reduced-motion:reduce){
+    .reach-map-canvas .leaflet-fade-anim .leaflet-tile,
+    .reach-map-canvas .leaflet-zoom-anim .leaflet-zoom-animated{transition:none !important;}
+  }
+
   /* ---------- COMMITTEE / SUPPORT ---------- */
   .support-strip{
     display:flex; flex-wrap:wrap; gap:14px; margin-top:28px;
@@ -822,6 +879,58 @@
         </div>
       </div>
     </div>
+
+    <div class="wrap reach-map">
+      <div class="sec-head">
+        <span class="eyebrow">Plan your route</span>
+        <h2>Three ways in</h2>
+        <p>Toggle a route to trace it on the map, or tap Directions to open it in Google Maps.</p>
+      </div>
+      <div class="reach-map-grid">
+        <div class="reach-map-canvas" id="reachMap" aria-label="Map showing three driving routes to Vayalada"></div>
+        <div class="reach-map-legend">
+          <h4>Routes</h4>
+
+          <div class="route-row">
+            <input type="checkbox" id="route-kozhikode" checked aria-label="Toggle route from Kozhikode on the map">
+            <div class="route-body">
+              <label for="route-kozhikode"><strong><span class="swatch" style="background:var(--forest)"></span>From Kozhikode</strong></label>
+              <span class="route-desc">Via Balussery</span>
+              <div class="route-meta">
+                <span class="route-dist" id="dist-kozhikode">— km</span>
+                <a class="route-directions" id="dir-kozhikode" href="#" target="_blank" rel="noopener">Directions</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="route-row">
+            <input type="checkbox" id="route-koyilandy" checked aria-label="Toggle route from Koyilandy on the map">
+            <div class="route-body">
+              <label for="route-koyilandy"><strong><span class="swatch" style="background:var(--laterite)"></span>From Koyilandy</strong></label>
+              <span class="route-desc">Coastal approach</span>
+              <div class="route-meta">
+                <span class="route-dist" id="dist-koyilandy">— km</span>
+                <a class="route-directions" id="dir-koyilandy" href="#" target="_blank" rel="noopener">Directions</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="route-row">
+            <input type="checkbox" id="route-thamarassery" checked aria-label="Toggle route from Thamarassery on the map">
+            <div class="route-body">
+              <label for="route-thamarassery"><strong><span class="swatch" style="background:var(--paddy)"></span>From Thamarassery</strong></label>
+              <span class="route-desc">Via the ghat road</span>
+              <div class="route-meta">
+                <span class="route-dist" id="dist-thamarassery">— km</span>
+                <a class="route-directions" id="dir-thamarassery" href="#" target="_blank" rel="noopener">Directions</a>
+              </div>
+            </div>
+          </div>
+
+          <p class="reach-map-note">Distances are calculated live from the mapped route, so they may differ slightly from the road-distance figures above.</p>
+        </div>
+      </div>
+    </div>
   </section>
 
   <div class="ridge-divider"><svg viewBox="0 0 1200 40" preserveAspectRatio="none"><path d="M0 20 Q300 40 600 18 T1200 25 V40 H0 Z" fill="var(--mist)"/></svg></div>
@@ -963,6 +1072,7 @@
   </div>
 </footer>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
   const toggle = document.getElementById('navToggle');
   const menu = document.getElementById('mobileMenu');
@@ -1084,6 +1194,191 @@
     } else {
       bioblitzSec.classList.add('bioblitz-reveal');
     }
+  }
+
+  // ---------- REACH MAP ----------
+  const reachMapEl = document.getElementById('reachMap');
+  if (reachMapEl && window.L) {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const rootCss = getComputedStyle(document.documentElement);
+    const themeColor = (name, fallback) => (rootCss.getPropertyValue(name).trim() || fallback);
+
+    const DEST = { lat: 11.50668, lng: 75.86606 };
+
+    const routes = [
+      { key: 'kozhikode',    file: 'geo/route_from_kozhikode.geojson',    color: themeColor('--forest', '#3C5B44') },
+      { key: 'koyilandy',    file: 'geo/route_from_koyilandy.geojson',    color: themeColor('--laterite', '#A44A2E') },
+      { key: 'thamarassery', file: 'geo/route_from_thamarassery.geojson', color: themeColor('--paddy', '#C4972B') },
+    ];
+
+    const map = L.map(reachMapEl, {
+      zoomControl: false,
+      zoomAnimation: !prefersReducedMotion,
+      fadeAnimation: !prefersReducedMotion,
+      markerZoomAnimation: !prefersReducedMotion,
+    });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}{r}.png', {
+      subdomains: 'abcd',
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>',
+    }).addTo(map);
+
+    const laterite = themeColor('--laterite', '#A44A2E');
+    const lateriteDark = themeColor('--laterite-dark', '#8A3C25');
+    const paper = themeColor('--paper', '#FFFEFA');
+
+    const destIcon = L.divIcon({
+      className: 'reach-pin',
+      html: `<svg width="26" height="34" viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1.5 6.1 1.5 12.4c0 8.6 10 19.4 10.4 19.9.3.3.9.3 1.2 0 .4-.5 10.4-11.3 10.4-19.9C24.5 6.1 19.6 1 13 1Z" fill="${laterite}" stroke="${lateriteDark}" stroke-width="1"/><circle cx="13" cy="12.5" r="4.2" fill="${paper}"/></svg>`,
+      iconSize: [26, 34],
+      iconAnchor: [13, 32],
+    });
+
+    const destMarker = L.marker([DEST.lat, DEST.lng], {
+      icon: destIcon,
+      alt: 'Vayalada trailhead',
+    }).addTo(map);
+
+    destMarker.bindTooltip('Vayalada', {
+      permanent: true,
+      direction: 'right',
+      offset: [8, -18],
+      className: 'reach-pin-label',
+    }).openTooltip();
+
+    destMarker.bindPopup('<strong>Vayalada trailhead</strong>All three routes converge here.');
+
+    // ---- distance helper: haversine over the raw GeoJSON coordinates ----
+    const toRad = deg => deg * Math.PI / 180;
+    const haversineKm = (a, b) => {
+      const R = 6371;
+      const dLat = toRad(b[1] - a[1]);
+      const dLng = toRad(b[0] - a[0]);
+      const lat1 = toRad(a[1]);
+      const lat2 = toRad(b[1]);
+      const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+      return R * 2 * Math.asin(Math.min(1, Math.sqrt(h)));
+    };
+    const lineLengthKm = coords => {
+      let total = 0;
+      for (let i = 1; i < coords.length; i++) total += haversineKm(coords[i - 1], coords[i]);
+      return total;
+    };
+
+    const allBoundsLayers = [];
+    let initialBounds = null;
+
+    const loaders = routes.map(route =>
+      fetch(route.file)
+        .then(res => res.json())
+        .then(geojson => {
+          const layer = L.geoJSON(geojson, {
+            style: { color: route.color, weight: 4, opacity: 0.85, lineCap: 'round' },
+          }).addTo(map);
+
+          allBoundsLayers.push(layer);
+
+          const coords = geojson.geometry.coordinates;
+          const km = lineLengthKm(coords);
+          const distEl = document.getElementById(`dist-${route.key}`);
+          if (distEl) distEl.textContent = `${km.toFixed(1)} km`;
+
+          const start = coords[0];
+          const dirEl = document.getElementById(`dir-${route.key}`);
+          if (dirEl) {
+            dirEl.href = `https://www.google.com/maps/dir/?api=1&origin=${start[1]},${start[0]}&destination=${DEST.lat},${DEST.lng}&travelmode=driving`;
+          }
+
+          const checkbox = document.getElementById(`route-${route.key}`);
+          if (checkbox) {
+            checkbox.addEventListener('change', () => {
+              if (checkbox.checked) {
+                layer.addTo(map);
+              } else {
+                map.removeLayer(layer);
+              }
+            });
+          }
+        })
+        .catch(err => console.warn(`Reach map: couldn't load ${route.file}`, err))
+    );
+
+    Promise.all(loaders).then(() => {
+      if (allBoundsLayers.length) {
+        const group = L.featureGroup(allBoundsLayers);
+        initialBounds = group.getBounds().pad(0.05);
+        map.fitBounds(initialBounds, { animate: !prefersReducedMotion });
+      } else {
+        map.setView([DEST.lat, DEST.lng], 11);
+      }
+    });
+
+    // ---- custom control bar: zoom in / zoom out / reset ----
+    const ZoomResetControl = L.Control.extend({
+      options: { position: 'topright' },
+      onAdd() {
+        const bar = L.DomUtil.create('div', 'reach-map-ctrl leaflet-control');
+
+        const zoomInBtn = L.DomUtil.create('button', '', bar);
+        zoomInBtn.type = 'button';
+        zoomInBtn.setAttribute('aria-label', 'Zoom in');
+        zoomInBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>';
+
+        const zoomOutBtn = L.DomUtil.create('button', '', bar);
+        zoomOutBtn.type = 'button';
+        zoomOutBtn.setAttribute('aria-label', 'Zoom out');
+        zoomOutBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg>';
+
+        const resetBtn = L.DomUtil.create('button', '', bar);
+        resetBtn.type = 'button';
+        resetBtn.setAttribute('aria-label', 'Reset view');
+        resetBtn.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg>';
+
+        L.DomEvent.disableClickPropagation(bar);
+        L.DomEvent.on(zoomInBtn, 'click', () => map.zoomIn());
+        L.DomEvent.on(zoomOutBtn, 'click', () => map.zoomOut());
+        L.DomEvent.on(resetBtn, 'click', () => {
+          if (initialBounds) map.fitBounds(initialBounds, { animate: !prefersReducedMotion });
+        });
+
+        return bar;
+      },
+    });
+    map.addControl(new ZoomResetControl());
+
+    // ---- "my location" control (best-effort, silent on failure) ----
+    const LocateControl = L.Control.extend({
+      options: { position: 'topright' },
+      onAdd() {
+        const btn = L.DomUtil.create('button', 'reach-map-locate leaflet-control');
+        btn.type = 'button';
+        btn.setAttribute('aria-label', 'Show my location');
+        btn.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>';
+
+        L.DomEvent.disableClickPropagation(btn);
+        L.DomEvent.on(btn, 'click', () => {
+          if (!navigator.geolocation) return;
+          navigator.geolocation.getCurrentPosition(
+            pos => {
+              const { latitude, longitude } = pos.coords;
+              L.marker([latitude, longitude], { alt: 'Your location' })
+                .addTo(map)
+                .bindPopup('You are here')
+                .openPopup();
+              map.setView([latitude, longitude], 13, { animate: !prefersReducedMotion });
+            },
+            () => { /* silent failure — permission denied or unavailable */ },
+            { enableHighAccuracy: true, timeout: 8000 }
+          );
+        });
+
+        return btn;
+      },
+    });
+    map.addControl(new LocateControl());
+
+    L.control.scale({ position: 'bottomleft', imperial: false }).addTo(map);
   }
 </script>
 
