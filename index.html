@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&family=Noto+Sans+Malayalam:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
   :root{
     --ink:#182B22;
@@ -89,7 +90,13 @@
     background:linear-gradient(180deg, #E8EEE2 0%, #DCE6D8 55%, var(--mist) 100%);
     padding:64px 0 0;
   }
+  .hero-spotlight{
+    position:absolute; inset:0; pointer-events:none; z-index:1; opacity:0;
+    background:radial-gradient(circle 300px at var(--sx, 50%) var(--sy, 50%), rgba(255,255,255,0.9), transparent 80%);
+    transition:opacity 500ms ease-out; will-change:opacity, background;
+  }
   .hero-inner{
+    position:relative; z-index:2;
     max-width:1120px; margin:0 auto; padding:64px 24px 40px;
     display:grid; grid-template-columns:1.15fr .85fr; gap:48px; align-items:center;
   }
@@ -98,13 +105,43 @@
   .hero .ml{display:block; font-size:16px; color:var(--forest-dark); margin-top:6px; font-weight:500;}
   .hero-sub{font-size:18px; max-width:52ch; color:#33473A; margin-top:16px;}
   .hero-meta{display:flex; flex-wrap:wrap; gap:22px; margin:26px 0 30px;}
-  .hero-meta div{font-size:13.5px;}
-  .hero-meta strong{display:block; font-family:'Fraunces',serif; font-size:20px; font-weight:600;}
+  .hero-meta div{
+    font-size:13.5px;
+    color:#4A594D;
+    padding:10px 14px;
+    margin:-10px -14px;
+    border-radius:12px;
+    border:1px solid transparent;
+    cursor:pointer;
+    transition: transform 250ms ease-out, box-shadow 250ms ease-out, background 250ms ease-out, border-color 250ms ease-out, color 250ms ease-out;
+  }
+  .hero-meta strong{
+    display:block;
+    font-family:'Fraunces',serif;
+    font-size:20px;
+    font-weight:600;
+    color:var(--ink);
+    transition: color 250ms ease-out, transform 250ms ease-out;
+  }
+  @media (hover: hover){
+    .hero-meta div:hover{
+      transform: translateY(-4px);
+      background: var(--paper);
+      border-color: var(--line);
+      box-shadow: 0 10px 24px rgba(24,43,34,0.08), 0 2px 6px rgba(24,43,34,0.04);
+      color: var(--ink);
+    }
+    .hero-meta div:hover strong{
+      color: var(--laterite);
+      transform: translateY(-1px);
+    }
+  }
   .hero-actions{display:flex; gap:14px; flex-wrap:wrap;}
   .btn{
     display:inline-flex; align-items:center; gap:8px;
     padding:14px 26px; border-radius:100px; text-decoration:none;
     font-weight:600; font-size:15px; border:1.5px solid transparent; cursor:pointer;
+    transition: transform 250ms ease-out, box-shadow 250ms ease-out, background-color 250ms ease-out, color 250ms ease-out, border-color 250ms ease-out;
   }
   .btn-primary{background:var(--laterite); color:#fff;}
   .btn-primary:hover{background:var(--laterite-dark);}
@@ -113,12 +150,154 @@
   .btn[disabled], .btn.disabled{
     background:#D8D2C2; color:#7A7361; cursor:not-allowed; border-color:transparent;
   }
+
+  /* ---------- HERO CTA MICRO-INTERACTIONS ---------- */
+  .hero-actions .btn{
+    will-change: transform, box-shadow;
+  }
+  .hero-actions .btn:hover{
+    transform: translateY(-2px);
+  }
+  .hero-actions .btn-primary:hover{
+    box-shadow: 0 8px 20px rgba(164,74,46,0.28);
+  }
+  .hero-actions .btn-ghost:hover{
+    box-shadow: 0 8px 20px rgba(24,43,34,0.12);
+  }
+  .hero-actions .btn:active{
+    transform: translateY(0) scale(0.97);
+    transition: transform 110ms cubic-bezier(0.2, 0, 0, 1), box-shadow 110ms cubic-bezier(0.2, 0, 0, 1);
+  }
+  .hero-actions .btn-primary:active{
+    box-shadow: 0 3px 8px rgba(164,74,46,0.22);
+  }
+  .hero-actions .btn-ghost:active{
+    box-shadow: 0 3px 8px rgba(24,43,34,0.10);
+  }
+  .hero-actions .btn svg, .hero-actions .btn .icon{
+    transition: transform 250ms ease-out;
+  }
+  .hero-actions .btn:hover svg, .hero-actions .btn:hover .icon{
+    transform: translateX(3px);
+  }
   .hero-art{position:relative;}
   .ridge{width:100%; height:auto;}
+
+  /* ---------- HERO ENTRANCE ANIMATION ---------- */
+  @keyframes heroTextEnter {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes heroBtnEnter {
+    0% {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes heroArtEnter {
+    0% {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1.0);
+    }
+  }
+
+  .hero-text {
+    animation: heroTextEnter 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .hero-actions .btn-primary {
+    animation: heroBtnEnter 500ms ease-out 180ms both;
+  }
+  .hero-actions .btn-ghost {
+    animation: heroBtnEnter 500ms ease-out 280ms both;
+  }
+  .hero-art {
+    animation: heroArtEnter 650ms ease-out 150ms both;
+  }
+
+  /* ---------- HERO AMBIENT ANIMATIONS ---------- */
+  @keyframes sunBreath {
+    0%, 100% { opacity: 0.45; transform: scale(1); }
+    50% { opacity: 0.95; transform: scale(1.12); }
+  }
+  @keyframes fogDrift1 {
+    0%, 100% { transform: translateX(-30px); opacity: 0.28; }
+    50% { transform: translateX(35px); opacity: 0.52; }
+  }
+  @keyframes fogDrift2 {
+    0%, 100% { transform: translateX(25px); opacity: 0.45; }
+    50% { transform: translateX(-30px); opacity: 0.22; }
+  }
+  @keyframes particleFloat1 {
+    0%, 100% { transform: translate(0, 0); opacity: 0.35; }
+    50% { transform: translate(16px, -24px); opacity: 0.85; }
+  }
+  @keyframes particleFloat2 {
+    0%, 100% { transform: translate(0, 0); opacity: 0.70; }
+    50% { transform: translate(-20px, -18px); opacity: 0.25; }
+  }
+  @keyframes particleFloat3 {
+    0%, 100% { transform: translate(0, 0); opacity: 0.30; }
+    50% { transform: translate(14px, -30px); opacity: 0.80; }
+  }
+  @keyframes badgeFloat {
+    0%, 100% {
+      transform: translate3d(var(--px, 0px), var(--py, 0px), 0) translateY(0);
+      box-shadow: var(--shadow);
+    }
+    50% {
+      transform: translate3d(var(--px, 0px), var(--py, 0px), 0) translateY(-3px);
+      box-shadow: 0 14px 32px rgba(24,43,34,0.14);
+    }
+  }
+  @keyframes sealFloat {
+    0%, 100% { transform: translate3d(var(--sx, 0px), var(--sy, 0px), 0) translateY(0); }
+    50% { transform: translate3d(var(--sx, 0px), var(--sy, 0px), 0) translateY(6px); }
+  }
+
+  .sun-glow-group {
+    animation: sunBreath 6s ease-in-out infinite;
+    transform-origin: 250px 130px;
+  }
+  .fog-layer-1 { animation: fogDrift1 9.5s ease-in-out infinite; }
+  .fog-layer-2 { animation: fogDrift2 8.5s ease-in-out infinite; }
+
+  .p-1 { animation: particleFloat1 7.5s ease-in-out infinite; }
+  .p-2 { animation: particleFloat2 9s ease-in-out infinite; }
+  .p-3 { animation: particleFloat3 8s ease-in-out infinite; }
+  .p-4 { animation: particleFloat1 10s ease-in-out infinite 1.5s; }
+  .p-5 { animation: particleFloat2 8.5s ease-in-out infinite 1s; }
+  .p-6 { animation: particleFloat3 7s ease-in-out infinite 2s; }
+  .p-7 { animation: particleFloat1 11s ease-in-out infinite 1s; }
+
+  .mountain-back, .mountain-mid, .mountain-front {
+    will-change: transform;
+    transition: transform 120ms ease-out;
+  }
+
+  .hero-seal {
+    position:absolute; top:-18px; right:4px; width:92px; height:auto; z-index:2;
+    filter:drop-shadow(0 6px 14px rgba(24,43,34,0.18));
+    animation: sealFloat 6s ease-in-out infinite;
+  }
   .badge-count{
     background:var(--paper); border:1px solid var(--line); border-radius:16px;
     padding:16px 18px; box-shadow:var(--shadow); position:absolute; bottom:-20px; left:-10px;
     font-size:13px; max-width:210px;
+    animation: badgeFloat 4.5s ease-in-out infinite;
   }
   .badge-count strong{font-family:'Fraunces',serif; font-size:26px; display:block; color:var(--laterite);}
   @media (max-width:880px){ .badge-count{position:static; margin-top:16px;} }
@@ -160,6 +339,58 @@
   .div-card{
     background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.14);
     border-radius:16px; padding:24px;
+    transition: transform 250ms ease-out, box-shadow 250ms ease-out, border-color 250ms ease-out;
+  }
+  .div-card:hover{
+    transform: translateY(-5px);
+    border-color: rgba(255,255,255,0.30);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.25), 0 0 20px rgba(255,255,255,0.14);
+  }
+  /* ---------- SCROLL REVEAL (WHAT'S A BIOBLITZ) ---------- */
+  @keyframes secHeadReveal {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes divCardReveal {
+    0% {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .bioblitz-reveal .sec-head {
+    animation: secHeadReveal 550ms ease-out both;
+  }
+  .bioblitz-reveal .div-card:nth-child(1) {
+    animation: divCardReveal 500ms ease-out 150ms both;
+  }
+  .bioblitz-reveal .div-card:nth-child(2) {
+    animation: divCardReveal 500ms ease-out 250ms both;
+  }
+  .bioblitz-reveal .div-card:nth-child(3) {
+    animation: divCardReveal 500ms ease-out 350ms both;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .hero-spotlight { display: none !important; }
+    .div-card, .tally-chip, .hero-meta div, .hero-meta strong, .sun-glow-group, .fog-layer-1, .fog-layer-2, [class^="p-"], .badge-count, .hero-seal, .mountain-back, .mountain-mid, .mountain-front, .hero-actions .btn, .hero-text, .hero-art, .bioblitz-reveal .sec-head, .bioblitz-reveal .div-card{
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .div-card:hover, .tally-chip:hover, .hero-meta div:hover, .hero-meta div:hover strong, .hero-actions .btn:hover, .hero-actions .btn:active{
+      transform: none !important;
+    }
   }
   .div-card .tag{font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--paddy); font-weight:600;}
   .div-card h4{font-size:19px; margin:10px 0 8px; color:#fff;}
@@ -172,6 +403,12 @@
     display:flex; align-items:center; gap:8px;
     background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.16);
     padding:9px 16px; border-radius:100px; font-size:14px;
+    transition: transform 250ms ease-out, box-shadow 250ms ease-out, border-color 250ms ease-out;
+  }
+  .tally-chip:hover{
+    transform: translateY(-2px);
+    border-color: rgba(255,255,255,0.30);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.20), 0 0 12px rgba(255,255,255,0.14);
   }
   .tally-chip .icon{stroke:#F1F2EA; width:18px; height:18px; margin:0;}
 
@@ -215,6 +452,62 @@
   .reach-list li:first-child, .fac-list li:first-child{padding-top:0;}
   .reach-list strong, .fac-list strong{display:block; font-size:15.5px;}
   .reach-list span, .fac-list span{font-size:14px; color:#4A594D;}
+
+  /* ---------- REACH MAP ---------- */
+  .reach-map{margin-top:56px;}
+  .reach-map .sec-head{margin-bottom:28px;}
+  .reach-map .sec-head p{color:#4A594D; font-size:14.5px;}
+  .reach-map-grid{display:grid; grid-template-columns:1.6fr 1fr; gap:28px; align-items:start;}
+  @media (max-width:880px){ .reach-map-grid{grid-template-columns:1fr;} }
+  .reach-map-canvas{z-index: -1;position:relative; height:440px; border-radius:18px; border:1px solid var(--line); box-shadow:var(--shadow); overflow:hidden; background:var(--paper);}
+  .reach-map-canvas .leaflet-container{font-family:'Work Sans', sans-serif; background:var(--mist);}
+  .reach-map-canvas .leaflet-popup-content-wrapper{border-radius:12px; box-shadow:var(--shadow);}
+  .reach-map-canvas .leaflet-popup-content{font-size:13.5px; color:var(--ink); margin:10px 14px;}
+  .reach-map-canvas .leaflet-popup-content strong{font-family:'Fraunces',serif; font-size:15px; display:block; margin-bottom:2px;}
+  .reach-map-canvas .leaflet-attribution-flag{display:none !important;}
+  .reach-pin-label{font-family:'Work Sans', sans-serif; font-weight:600; font-size:12.5px; color:var(--laterite-dark); background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:2px 8px; box-shadow:var(--shadow);}
+  .reach-pin-label::before{border:none;}
+
+  .reach-map-ctrl{background:var(--paper); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); overflow:hidden;}
+  .reach-map-ctrl button{
+    display:flex; align-items:center; justify-content:center; width:34px; height:34px;
+    border:0; background:none; color:var(--forest-dark); cursor:pointer; padding:0;
+    border-bottom:1px solid var(--line);
+  }
+  .reach-map-ctrl button:last-child{border-bottom:0;}
+  .reach-map-ctrl button:hover{background:var(--mist);}
+  .reach-map-locate{
+    margin-top:8px; width:34px; height:34px; display:flex; align-items:center; justify-content:center;
+    background:var(--paper); border:1px solid var(--line); border-radius:50%; box-shadow:var(--shadow);
+    color:var(--laterite); cursor:pointer; padding:0;
+  }
+  .reach-map-locate:hover{background:var(--mist);}
+  .reach-map-ctrl svg, .reach-map-locate svg{width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:1.8;}
+
+  .reach-map-legend{background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:22px;}
+  .reach-map-legend h4{font-family:'Fraunces',serif; font-size:16px; margin:0 0 14px;}
+  .route-row{display:flex; gap:12px; padding:14px 0; border-bottom:1px solid var(--line);}
+  .route-row:last-child{border-bottom:0; padding-bottom:0;}
+  .route-row:first-child{padding-top:0;}
+  .route-row input[type="checkbox"]{width:17px; height:17px; margin-top:3px; flex:0 0 auto; accent-color:var(--forest);}
+  .route-row .swatch{width:11px; height:11px; border-radius:50%; display:inline-block; margin-right:6px; flex:0 0 auto;}
+  .route-row .route-body{flex:1; min-width:0;}
+  .route-row label{cursor:pointer;}
+  .route-row strong{display:flex; align-items:center; font-size:14.5px;}
+  .route-row .route-desc{display:block; font-size:13px; color:#4A594D; margin-top:2px;}
+  .route-row .route-meta{display:flex; align-items:center; justify-content:space-between; margin-top:8px; gap:10px;}
+  .route-row .route-dist{font-size:13px; font-weight:600; color:var(--forest-dark);}
+  .route-row a.route-directions{
+    font-size:12.5px; font-weight:600; color:#fff; background:var(--laterite); text-decoration:none;
+    padding:6px 12px; border-radius:100px; white-space:nowrap;
+  }
+  .route-row a.route-directions:hover{background:var(--laterite-dark);}
+  .reach-map-note{font-size:12.5px; color:#5B6B5F; margin-top:16px;}
+
+  @media (prefers-reduced-motion:reduce){
+    .reach-map-canvas .leaflet-fade-anim .leaflet-tile,
+    .reach-map-canvas .leaflet-zoom-anim .leaflet-zoom-animated{transition:none !important;}
+  }
 
   /* ---------- COMMITTEE / SUPPORT ---------- */
   .support-strip{
@@ -311,8 +604,9 @@
 
   <!-- ================= HERO ================= -->
   <section class="hero">
+    <div class="hero-spotlight" aria-hidden="true"></div>
     <div class="hero-inner">
-      <div>
+      <div class="hero-text">
         <span class="eyebrow">48 hours · 8–9 August 2026</span>
         <h1>Vayalada Bioblitz<span class="ml">വയലടയിലെ ജൈവവൈവിധ്യം</span></h1>
         <p class="hero-sub">A community biodiversity survey on the misty hilltop of Vayalada — scientists, students and residents recording every plant, bird, moth and creature they can find, together. In support of participatory science and sustainable tourism for the Western Ghats.</p>
@@ -327,15 +621,38 @@
         </div>
       </div>
       <div class="hero-art">
-        <img src="img/VBB-Logo-text.svg" alt="Vayalada Bioblitz 2026 seal" style="position:absolute; top:-18px; right:4px; width:92px; height:auto; z-index:2; filter:drop-shadow(0 6px 14px rgba(24,43,34,0.18));">
+        <img src="img/VBB-Logo-text.svg" alt="Vayalada Bioblitz 2026 seal" class="hero-seal">
         <svg class="ridge" viewBox="0 0 480 380" fill="none">
-          <path d="M0 200 L60 140 L110 175 L150 100 L200 165 L250 90 L300 160 L350 120 L400 175 L480 130 V380 H0 Z" fill="#B9C9B4"/>
-          <path d="M0 250 L70 200 L130 235 L180 175 L230 225 L290 165 L340 220 L400 190 L480 230 V380 H0 Z" fill="#8FAE8D"/>
-          <path d="M0 300 L80 260 L140 290 L210 240 L270 285 L330 250 L400 285 L480 260 V380 H0 Z" fill="#3C5B44"/>
-          <g opacity="0.75">
-            <circle cx="120" cy="150" r="3" fill="#F8F5EC"/>
-            <circle cx="300" cy="110" r="2.4" fill="#F8F5EC"/>
-            <circle cx="380" cy="150" r="2" fill="#F8F5EC"/>
+          <!-- Back mountain -->
+          <path class="mountain-back" d="M0 200 L60 140 L110 175 L150 100 L200 165 L250 90 L300 160 L350 120 L400 175 L480 130 V380 H0 Z" fill="#B9C9B4"/>
+          <!-- Ambient Fog Layer 1 -->
+          <g class="fog-layer-1">
+            <ellipse cx="140" cy="160" rx="160" ry="30" fill="#F8F5EC" opacity="0.35" filter="blur(12px)"/>
+            <ellipse cx="360" cy="150" rx="140" ry="24" fill="#F8F5EC" opacity="0.30" filter="blur(12px)"/>
+          </g>
+          <!-- Middle mountain -->
+          <path class="mountain-mid" d="M0 250 L70 200 L130 235 L180 175 L230 225 L290 165 L340 220 L400 190 L480 230 V380 H0 Z" fill="#8FAE8D"/>
+          <!-- Ambient Fog Layer 2 -->
+          <g class="fog-layer-2">
+            <ellipse cx="220" cy="220" rx="180" ry="28" fill="#EEF1E8" opacity="0.38" filter="blur(10px)"/>
+          </g>
+          <!-- Front mountain -->
+          <path class="mountain-front" d="M0 300 L80 260 L140 290 L210 240 L270 285 L330 250 L400 285 L480 260 V380 H0 Z" fill="#3C5B44"/>
+          <!-- Sun glow dots -->
+          <g class="sun-glow-group" opacity="0.85">
+            <circle cx="120" cy="150" r="3.5" fill="#F8F5EC"/>
+            <circle cx="300" cy="110" r="3.0" fill="#F8F5EC"/>
+            <circle cx="380" cy="150" r="2.5" fill="#F8F5EC"/>
+          </g>
+          <!-- Ambient Air Particles -->
+          <g class="ambient-particles">
+            <circle class="p-1" cx="80" cy="170" r="2.2" fill="#F8F5EC"/>
+            <circle class="p-2" cx="160" cy="120" r="1.8" fill="#F8F5EC"/>
+            <circle class="p-3" cx="250" cy="100" r="2.8" fill="#F8F5EC"/>
+            <circle class="p-4" cx="330" cy="130" r="2.0" fill="#F8F5EC"/>
+            <circle class="p-5" cx="200" cy="180" r="2.5" fill="#F8F5EC"/>
+            <circle class="p-6" cx="380" cy="160" r="1.8" fill="#F8F5EC"/>
+            <circle class="p-7" cx="120" cy="210" r="2.4" fill="#F8F5EC"/>
           </g>
         </svg>
         <div class="badge-count"><strong>48 hrs</strong>of continuous observation across three habitat zones, from dawn birdsong to nocturnal moth counts.</div>
@@ -372,19 +689,21 @@
 
       <div class="viewpoints">
         <div class="vp-card">
-          <svg class="icon" viewBox="0 0 24 24"><path d="M3 18 L9 8 L13 14 L16 10 L21 18 Z" stroke-linejoin="round"/></svg>
+          <img src="img/panagad vayalada.JPG" alt="Scenic rockey mountain viewpoint with panoramic views of lush forests, rolling hills, and a mist covered valley in Kerala." style="width:100%; aspect-ratio:4/3; object-fit:cover; border-radius: 8px">
+          <div style="padding:10px;"></div>
           <h4>Mount Vayalada Viewpoint</h4>
           <p>Four-direction views from the summit: Kakkayam and the Wayanad hills to the east (mist-capped at dawn, green by noon), the blue waters of Peruvannamuzhi reservoir to the north, the Arabian Sea over a sea of clouds to the west, and misty green peaks rising to the south.</p>
         </div>
-        <div class="vp-card" style="padding:0; overflow:hidden;">
-          <img src="img/panagad_vayalada_2.jpg" alt="Mullanpara rock outcrop at Vayalada, overlooking the hazy valley" style="width:100%; aspect-ratio:4/3; object-fit:cover;">
+        <div class="vp-card">
+          <img src="img/panagad vayalada 2.JPG" alt="Mullanpara rock outcrop at Vayalada, overlooking the hazy valley" style="width:100%; aspect-ratio:4/3; object-fit:cover; border-radius: 8px">
           <div style="padding:20px;">
           <h4>Mullanpara</h4>
           <p>A rock outcrop with spiky, limestone-like ridges rising toward the sky — never slippery even in rain, and safe for visitors of any age. Vayalada's most popular photo point, with an elevated view over the reservoir below.</p>
           </div>
         </div>
         <div class="vp-card">
-          <svg class="icon" viewBox="0 0 24 24"><path d="M4 20 L10 6 L14 14 L18 4 L20 20 Z" stroke-linejoin="round"/></svg>
+          <img src="img/vayalada001a.jpg" alt="Visitors enjoying a golden sunset from a scenic mountain viewpoint, overlooking lush green hills, misty valleys, and layered mountain ranges under a warm evening sky." style="width:100%; aspect-ratio:4/3; object-fit:cover; border-radius: 8px">
+          <div style="padding:10px;"></div>
           <h4>Kottakunnu Viewpoint</h4>
           <p>Overlooks Koorachundu and Perambra towns spread across the valley floor.</p>
         </div>
@@ -478,23 +797,23 @@
       </div>
       <div class="explore-grid">
         <div class="exp-card">
-          <img src="img/panagad_vayalada.jpg" alt="Rocky outcrop along the Vayalada trail, overlooking the forested hillside" style="width:100%; aspect-ratio:16/9; object-fit:cover;">
+          <img src="img/DSCN5347.JPG" alt="A narrow countryside trail winding through lush green trees and dense vegetation beneath a clear blue sky." style="width:100%; aspect-ratio:16/9; object-fit:cover;">
           <div class="body"><h4>The summit trek</h4><p>A moderate, roughly 1 km climb through forest and open slope — steep in stretches, but manageable for most walkers with sturdy footwear.</p></div>
         </div>
         <div class="exp-card">
-          <div class="photo-slot">Photo: monsoon mist over the ridge<br><span style="font-size:11px;">— add image</span></div>
+          <img src="img/DSCN5479.JPG" alt="Panoramic view of a lush green valley with dense forest, rolling hills, and a light mist covering the distant landscape." style="width:100%; aspect-ratio:16/9; object-fit:cover;">
           <div class="body"><h4>Monsoon mist</h4><p>Vayalada's signature moment: rolling cloud and mist through the rains, with a cool breeze that gives the hill its "Gavi of Malabar" reputation.</p></div>
         </div>
         <div class="exp-card">
-          <div class="photo-slot">Photo: guided bioblitz field walk<br><span style="font-size:11px;">— add image</span></div>
+          <img src="img/DSCN5339.JPG" alt="A quiet paved road winding through dense tropical forest with tall trees and lush green vegetation under a clear blue sky." style="width:100%; aspect-ratio:16/9; object-fit:cover;">
           <div class="body"><h4>Guided field walks</h4><p>During the bioblitz, small groups move with naturalists and subject experts to spot and log species along marked routes.</p></div>
         </div>
         <div class="exp-card">
-          <div class="photo-slot">Photo: night walk / nocturnal survey<br><span style="font-size:11px;">— add image</span></div>
+          <img src="img/night_view.png" alt="A quiet forest traill illuminated by bright moonlight, surrounded by dense treees beneth a starfilled night sky." style="width:100%; aspect-ratio:16/9; object-fit:cover;">
           <div class="body"><h4>Night walks</h4><p>After dark, dedicated teams look for nocturnal and elusive species — moths, frogs and creatures rarely seen in daylight.</p></div>
         </div>
         <div class="exp-card">
-          <div class="photo-slot">Photo: Vayalada Ultra Trail Run<br><span style="font-size:11px;">— add image</span></div>
+          <img src="img/DSCN5490.JPG" alt="Jagged rock formations at a mountain viewpoint overlooking a vast green valley, forests, and distant hills under a clear blue sky." style="width:100%; aspect-ratio:16/9; object-fit:cover;">
           <div class="body"><h4>Vayalada Ultra Trail Run</h4><p>One of only two ITRA-certified trail runs in Kerala. The 5th annual edition — 30 km and 60 km routes through hill forest paths from Balussery to Vayalada — runs on 15 November 2026, drawing 300+ runners from India and abroad each year.</p></div>
         </div>
       </div>
@@ -559,6 +878,58 @@
             <li>Personal toiletries (toothbrush, toothpaste, soap, towel, etc.)</li>
             <li>Torch, comfortable trekking footwear and weather-appropriate clothing</li>
           </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap reach-map">
+      <div class="sec-head">
+        <span class="eyebrow">Plan your route</span>
+        <h2>Three ways in</h2>
+        <p>Toggle a route to trace it on the map, or tap Directions to open it in Google Maps.</p>
+      </div>
+      <div class="reach-map-grid">
+        <div class="reach-map-canvas" id="reachMap" aria-label="Map showing three driving routes to Vayalada"></div>
+        <div class="reach-map-legend">
+          <h4>Routes</h4>
+
+          <div class="route-row">
+            <input type="checkbox" id="route-kozhikode" checked aria-label="Toggle route from Kozhikode on the map">
+            <div class="route-body">
+              <label for="route-kozhikode"><strong><span class="swatch" style="background:var(--forest)"></span>From Kozhikode</strong></label>
+              <span class="route-desc">Via Balussery</span>
+              <div class="route-meta">
+                <span class="route-dist" id="dist-kozhikode">— km</span>
+                <a class="route-directions" id="dir-kozhikode" href="#" target="_blank" rel="noopener">Directions</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="route-row">
+            <input type="checkbox" id="route-koyilandy" checked aria-label="Toggle route from Koyilandy on the map">
+            <div class="route-body">
+              <label for="route-koyilandy"><strong><span class="swatch" style="background:var(--laterite)"></span>From Koyilandy</strong></label>
+              <span class="route-desc">Coastal approach</span>
+              <div class="route-meta">
+                <span class="route-dist" id="dist-koyilandy">— km</span>
+                <a class="route-directions" id="dir-koyilandy" href="#" target="_blank" rel="noopener">Directions</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="route-row">
+            <input type="checkbox" id="route-thamarassery" checked aria-label="Toggle route from Thamarassery on the map">
+            <div class="route-body">
+              <label for="route-thamarassery"><strong><span class="swatch" style="background:var(--paddy)"></span>From Thamarassery</strong></label>
+              <span class="route-desc">Via the ghat road</span>
+              <div class="route-meta">
+                <span class="route-dist" id="dist-thamarassery">— km</span>
+                <a class="route-directions" id="dir-thamarassery" href="#" target="_blank" rel="noopener">Directions</a>
+              </div>
+            </div>
+          </div>
+
+          <p class="reach-map-note">Distances are calculated live from the mapped route, so they may differ slightly from the road-distance figures above.</p>
         </div>
       </div>
     </div>
@@ -703,6 +1074,7 @@
   </div>
 </footer>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
   const toggle = document.getElementById('navToggle');
   const menu = document.getElementById('mobileMenu');
@@ -714,6 +1086,302 @@
   menu.addEventListener('click', (e) => {
     if (e.target.tagName === 'A') menu.style.display = 'none';
   });
+
+  // Layered Mouse Parallax & Ambient Spotlight for Hero Section
+  const heroSection = document.querySelector('.hero');
+  const heroArt = document.querySelector('.hero-art');
+  const heroSpotlight = heroSection ? heroSection.querySelector('.hero-spotlight') : null;
+  const isFinePointer = window.matchMedia('(pointer: fine)').matches;
+  const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (heroSection && isFinePointer && !isReducedMotion) {
+    const backMtn = heroArt ? heroArt.querySelector('.mountain-back') : null;
+    const midMtn = heroArt ? heroArt.querySelector('.mountain-mid') : null;
+    const frontMtn = heroArt ? heroArt.querySelector('.mountain-front') : null;
+    const badgeCard = heroArt ? heroArt.querySelector('.badge-count') : null;
+    const heroSeal = heroArt ? heroArt.querySelector('.hero-seal') : null;
+
+    let targetX = 0, targetY = 0;
+    let currentX = 0, currentY = 0;
+    let spotTargetX = 0, spotTargetY = 0;
+    let spotCurrentX = 0, spotCurrentY = 0;
+
+    heroSection.addEventListener('mousemove', (e) => {
+      const rect = heroSection.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      targetX = Math.max(-1, Math.min(1, (e.clientX - centerX) / (rect.width / 2)));
+      targetY = Math.max(-1, Math.min(1, (e.clientY - centerY) / (rect.height / 2)));
+
+      if (heroSpotlight) {
+        spotTargetX = e.clientX - rect.left;
+        spotTargetY = e.clientY - rect.top;
+        heroSpotlight.style.opacity = '0.04';
+      }
+    });
+
+    heroSection.addEventListener('mouseleave', () => {
+      targetX = 0;
+      targetY = 0;
+      if (heroSpotlight) {
+        heroSpotlight.style.opacity = '0';
+      }
+    });
+
+    function updateHeroMotion() {
+      currentX += (targetX - currentX) * 0.06;
+      currentY += (targetY - currentY) * 0.06;
+
+      // Layer 1 — Background Mountains: opposite cursor, max H: 4px, V: 2px
+      if (backMtn) backMtn.style.transform = `translate3d(${currentX * -4}px, ${currentY * -2}px, 0)`;
+
+      // Layer 2 — Middle Mountains: max H: 6px, V: 3px
+      if (midMtn) midMtn.style.transform = `translate3d(${currentX * -6}px, ${currentY * -3}px, 0)`;
+
+      // Layer 3 — Foreground Elements: max H: 8px, V: 4px
+      if (frontMtn) frontMtn.style.transform = `translate3d(${currentX * -8}px, ${currentY * -4}px, 0)`;
+
+      // Floating "48 hrs" card: stronger response, max H: 8px, V: 8px
+      if (badgeCard) {
+        badgeCard.style.setProperty('--px', `${currentX * -8}px`);
+        badgeCard.style.setProperty('--py', `${currentY * -8}px`);
+      }
+
+      // Poster seal card
+      if (heroSeal) {
+        heroSeal.style.setProperty('--sx', `${currentX * -6}px`);
+        heroSeal.style.setProperty('--sy', `${currentY * -4}px`);
+      }
+
+      // Ambient Spotlight lerp
+      if (heroSpotlight) {
+        spotCurrentX += (spotTargetX - spotCurrentX) * 0.08;
+        spotCurrentY += (spotTargetY - spotCurrentY) * 0.08;
+        heroSpotlight.style.setProperty('--sx', `${spotCurrentX.toFixed(1)}px`);
+        heroSpotlight.style.setProperty('--sy', `${spotCurrentY.toFixed(1)}px`);
+      }
+
+      requestAnimationFrame(updateHeroMotion);
+    }
+    requestAnimationFrame(updateHeroMotion);
+  }
+
+  // Smooth scroll handler for CTA & anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const targetId = this.getAttribute('href');
+      if (targetId && targetId !== '#') {
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          e.preventDefault();
+          targetElement.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
+  });
+
+  // IntersectionObserver Scroll Reveal for #about-bioblitz
+  const bioblitzSec = document.getElementById('about-bioblitz');
+  if (bioblitzSec) {
+    if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('bioblitz-reveal');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      observer.observe(bioblitzSec);
+    } else {
+      bioblitzSec.classList.add('bioblitz-reveal');
+    }
+  }
+
+  // ---------- REACH MAP ----------
+  const reachMapEl = document.getElementById('reachMap');
+  if (reachMapEl && window.L) {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const rootCss = getComputedStyle(document.documentElement);
+    const themeColor = (name, fallback) => (rootCss.getPropertyValue(name).trim() || fallback);
+
+    const DEST = { lat: 11.50668, lng: 75.86606 };
+
+    const routes = [
+      { key: 'kozhikode',    file: 'geo/route_from_kozhikode.geojson',    color: themeColor('--forest', '#3C5B44') },
+      { key: 'koyilandy',    file: 'geo/route_from_koyilandy.geojson',    color: themeColor('--laterite', '#A44A2E') },
+      { key: 'thamarassery', file: 'geo/route_from_thamarassery.geojson', color: themeColor('--paddy', '#C4972B') },
+    ];
+
+    const map = L.map(reachMapEl, {
+      zoomControl: false,
+      zoomAnimation: !prefersReducedMotion,
+      fadeAnimation: !prefersReducedMotion,
+      markerZoomAnimation: !prefersReducedMotion,
+    });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}{r}.png', {
+      subdomains: 'abcd',
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>',
+    }).addTo(map);
+
+    const laterite = themeColor('--laterite', '#A44A2E');
+    const lateriteDark = themeColor('--laterite-dark', '#8A3C25');
+    const paper = themeColor('--paper', '#FFFEFA');
+
+    const destIcon = L.divIcon({
+      className: 'reach-pin',
+      html: `<svg width="26" height="34" viewBox="0 0 26 34" aria-hidden="true"><path d="M13 1C6.4 1 1.5 6.1 1.5 12.4c0 8.6 10 19.4 10.4 19.9.3.3.9.3 1.2 0 .4-.5 10.4-11.3 10.4-19.9C24.5 6.1 19.6 1 13 1Z" fill="${laterite}" stroke="${lateriteDark}" stroke-width="1"/><circle cx="13" cy="12.5" r="4.2" fill="${paper}"/></svg>`,
+      iconSize: [26, 34],
+      iconAnchor: [13, 32],
+    });
+
+    const destMarker = L.marker([DEST.lat, DEST.lng], {
+      icon: destIcon,
+      alt: 'Vayalada trailhead',
+    }).addTo(map);
+
+    destMarker.bindTooltip('Vayalada', {
+      permanent: true,
+      direction: 'right',
+      offset: [8, -18],
+      className: 'reach-pin-label',
+    }).openTooltip();
+
+    destMarker.bindPopup('<strong>Vayalada trailhead</strong>All three routes converge here.');
+
+    // ---- distance helper: haversine over the raw GeoJSON coordinates ----
+    const toRad = deg => deg * Math.PI / 180;
+    const haversineKm = (a, b) => {
+      const R = 6371;
+      const dLat = toRad(b[1] - a[1]);
+      const dLng = toRad(b[0] - a[0]);
+      const lat1 = toRad(a[1]);
+      const lat2 = toRad(b[1]);
+      const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+      return R * 2 * Math.asin(Math.min(1, Math.sqrt(h)));
+    };
+    const lineLengthKm = coords => {
+      let total = 0;
+      for (let i = 1; i < coords.length; i++) total += haversineKm(coords[i - 1], coords[i]);
+      return total;
+    };
+
+    const allBoundsLayers = [];
+    let initialBounds = null;
+
+    const loaders = routes.map(route =>
+      fetch(route.file)
+        .then(res => res.json())
+        .then(geojson => {
+          const layer = L.geoJSON(geojson, {
+            style: { color: route.color, weight: 4, opacity: 0.85, lineCap: 'round' },
+          }).addTo(map);
+
+          allBoundsLayers.push(layer);
+
+          const coords = geojson.geometry.coordinates;
+          const km = lineLengthKm(coords);
+          const distEl = document.getElementById(`dist-${route.key}`);
+          if (distEl) distEl.textContent = `${km.toFixed(1)} km`;
+
+          const start = coords[0];
+          const dirEl = document.getElementById(`dir-${route.key}`);
+          if (dirEl) {
+            dirEl.href = `https://www.google.com/maps/dir/?api=1&origin=${start[1]},${start[0]}&destination=${DEST.lat},${DEST.lng}&travelmode=driving`;
+          }
+
+          const checkbox = document.getElementById(`route-${route.key}`);
+          if (checkbox) {
+            checkbox.addEventListener('change', () => {
+              if (checkbox.checked) {
+                layer.addTo(map);
+              } else {
+                map.removeLayer(layer);
+              }
+            });
+          }
+        })
+        .catch(err => console.warn(`Reach map: couldn't load ${route.file}`, err))
+    );
+
+    Promise.all(loaders).then(() => {
+      if (allBoundsLayers.length) {
+        const group = L.featureGroup(allBoundsLayers);
+        initialBounds = group.getBounds().pad(0.05);
+        map.fitBounds(initialBounds, { animate: !prefersReducedMotion });
+      } else {
+        map.setView([DEST.lat, DEST.lng], 11);
+      }
+    });
+
+    // ---- custom control bar: zoom in / zoom out / reset ----
+    const ZoomResetControl = L.Control.extend({
+      options: { position: 'topright' },
+      onAdd() {
+        const bar = L.DomUtil.create('div', 'reach-map-ctrl leaflet-control');
+
+        const zoomInBtn = L.DomUtil.create('button', '', bar);
+        zoomInBtn.type = 'button';
+        zoomInBtn.setAttribute('aria-label', 'Zoom in');
+        zoomInBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>';
+
+        const zoomOutBtn = L.DomUtil.create('button', '', bar);
+        zoomOutBtn.type = 'button';
+        zoomOutBtn.setAttribute('aria-label', 'Zoom out');
+        zoomOutBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg>';
+
+        const resetBtn = L.DomUtil.create('button', '', bar);
+        resetBtn.type = 'button';
+        resetBtn.setAttribute('aria-label', 'Reset view');
+        resetBtn.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg>';
+
+        L.DomEvent.disableClickPropagation(bar);
+        L.DomEvent.on(zoomInBtn, 'click', () => map.zoomIn());
+        L.DomEvent.on(zoomOutBtn, 'click', () => map.zoomOut());
+        L.DomEvent.on(resetBtn, 'click', () => {
+          if (initialBounds) map.fitBounds(initialBounds, { animate: !prefersReducedMotion });
+        });
+
+        return bar;
+      },
+    });
+    map.addControl(new ZoomResetControl());
+
+    // ---- "my location" control (best-effort, silent on failure) ----
+    const LocateControl = L.Control.extend({
+      options: { position: 'topright' },
+      onAdd() {
+        const btn = L.DomUtil.create('button', 'reach-map-locate leaflet-control');
+        btn.type = 'button';
+        btn.setAttribute('aria-label', 'Show my location');
+        btn.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>';
+
+        L.DomEvent.disableClickPropagation(btn);
+        L.DomEvent.on(btn, 'click', () => {
+          if (!navigator.geolocation) return;
+          navigator.geolocation.getCurrentPosition(
+            pos => {
+              const { latitude, longitude } = pos.coords;
+              L.marker([latitude, longitude], { alt: 'Your location' })
+                .addTo(map)
+                .bindPopup('You are here')
+                .openPopup();
+              map.setView([latitude, longitude], 13, { animate: !prefersReducedMotion });
+            },
+            () => { /* silent failure — permission denied or unavailable */ },
+            { enableHighAccuracy: true, timeout: 8000 }
+          );
+        });
+
+        return btn;
+      },
+    });
+    map.addControl(new LocateControl());
+
+    L.control.scale({ position: 'bottomleft', imperial: false }).addTo(map);
+  }
 </script>
 
 </body>
