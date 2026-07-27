@@ -713,6 +713,20 @@
   .partner-card:hover .partner-logo {
     transform: scale(1.05);
   }
+  .card-leaf-accent {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: var(--forest-dark);
+    opacity: 0;
+    transform: scale(0.6) rotate(-15deg);
+    transition: opacity 250ms ease, transform 250ms ease;
+    pointer-events: none;
+  }
+  .partner-card:hover .card-leaf-accent {
+    opacity: 0.6;
+    transform: scale(1) rotate(0deg);
+  }
   .partner-info {
     display: flex;
     flex-direction: column;
