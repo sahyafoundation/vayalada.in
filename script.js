@@ -304,3 +304,41 @@
 
     L.control.scale({ position: 'bottomleft', imperial: false }).addTo(map);
   }
+
+  // ---------- PARTNER LOGO FALLBACK HANDLER ----------
+  window.handlePartnerLogoError = function(img) {
+    const card = img.closest('.partner-card');
+    if (card) {
+      card.classList.add('text-only');
+    }
+  };
+
+  // ---------- VIEWPORT SCROLL ENTRANCE ANIMATIONS ----------
+  document.addEventListener('DOMContentLoaded', () => {
+    const animElements = document.querySelectorAll('.animate-on-scroll');
+    if (animElements.length === 0) return;
+
+    // Stagger animation delays within card grids
+    const containers = document.querySelectorAll('.committee-card-grid, .partner-card-grid');
+    containers.forEach(container => {
+      const cards = container.querySelectorAll('.animate-on-scroll');
+      cards.forEach((card, index) => {
+        card.style.transitionDelay = `${index * 80}ms`;
+      });
+    });
+
+    if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      animElements.forEach(el => observer.observe(el));
+    } else {
+      animElements.forEach(el => el.classList.add('is-visible'));
+    }
+  });
