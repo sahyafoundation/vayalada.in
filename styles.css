@@ -793,6 +793,75 @@
     }
   }
 
+  /* ---------- VIDEO SECTION ---------- */
+  .video-section {
+    background: linear-gradient(180deg, var(--mist) 0%, var(--parchment) 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .sec-head.center {
+    text-align: center;
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .sec-head.center .eyebrow {
+    justify-content: center;
+  }
+  .video-card-wrapper {
+    max-width: 900px;
+    margin: 40px auto 0;
+    width: 100%;
+  }
+  .video-card {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: 0 16px 36px -8px rgba(24, 43, 34, 0.12);
+    overflow: hidden;
+    transition: transform 300ms ease, box-shadow 300ms ease;
+  }
+  .video-card:hover {
+    box-shadow: 0 20px 42px -6px rgba(24, 43, 34, 0.16);
+  }
+  .video-card iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 20px;
+    z-index: 2;
+  }
+  .video-fallback-card {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: var(--paper);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 24px;
+    text-align: center;
+  }
+  .video-fallback-card .fallback-msg {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0;
+  }
+  .video-fallback-card .fallback-btn {
+    font-size: 13.5px;
+    padding: 10px 20px;
+    margin-top: 4px;
+  }
+
   /* ---------- CONTACT ---------- */
   .contact{background:var(--mist);}
   .contact-grid{display:grid; grid-template-columns:1.1fr .9fr; gap:48px;}
