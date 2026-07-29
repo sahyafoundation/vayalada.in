@@ -342,3 +342,37 @@
       animElements.forEach(el => el.classList.add('is-visible'));
     }
   });
+
+  // ---------- PROGRAMME SECTION DYNAMIC RENDERER ----------
+  function renderProgrammeCard(dayData) {
+    return `
+      <div class="day-card">
+        <div class="day-label">
+          <strong>${dayData.day}</strong>
+          <span>${dayData.date}</span>
+        </div>
+        <ul class="timeline">
+          ${dayData.schedule.map(item => `
+            <li>
+              <span class="time-col">${item.time}</span>
+              <span class="activity-col">${item.activity}</span>
+            </li>
+          `).join('')}
+        </ul>
+      </div>
+    `;
+  }
+
+  function initProgrammeSection() {
+    const programmeGrid = document.getElementById('programmeGrid');
+    if (!programmeGrid || typeof programmeData === 'undefined') return;
+
+    programmeGrid.innerHTML = programmeData.map(renderProgrammeCard).join('');
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProgrammeSection);
+  } else {
+    initProgrammeSection();
+  }
+

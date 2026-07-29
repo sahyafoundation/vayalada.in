@@ -205,28 +205,8 @@
             <h2>Programme</h2>
             <p>A rapid biodiversity assessment run over two full days at Vayalada, Panangad — from registration to closing presentation.</p>
           </div>
-          <div class="day-grid">
-            <div class="day-card">
-              <div class="day-label"><strong>Day 1</strong><span>8 August 2026</span></div>
-              <ul class="timeline">
-                <li>Registration and inauguration</li>
-                <li>Orientation and safety briefing</li>
-                <li>Formation of thematic survey teams</li>
-                <li>Habitat-based surveys and documentation</li>
-                <li>Data entry and review</li>
-                <li>Night surveys for nocturnal fauna</li>
-              </ul>
-            </div>
-            <div class="day-card">
-              <div class="day-label"><strong>Day 2</strong><span>9 August 2026</span></div>
-              <ul class="timeline">
-                <li>Bird and butterfly walks</li>
-                <li>Continued surveys</li>
-                <li>Data compilation and expert validation</li>
-                <li>GIS data integration briefing</li>
-                <li>Presentation of findings and closing session</li>
-              </ul>
-            </div>
+          <div class="day-grid" id="programmeGrid">
+            <!-- Dynamically populated from programmeData.js -->
           </div>
         </div>
       </section>
@@ -1030,6 +1010,7 @@
     </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="programmeData.js" defer></script>
     <script src="script.js" defer></script>
 
   </body>
