@@ -510,6 +510,97 @@
     .reach-map-canvas .leaflet-zoom-anim .leaflet-zoom-animated{transition:none !important;}
   }
 
+  /* ---------- K.S.R.T.C. BUS TIME SCHEDULE ---------- */
+  .bus-subheading {
+    font-size: 16.5px;
+    font-weight: 600;
+    color: var(--forest-dark);
+    margin-bottom: 6px;
+  }
+  .bus-schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+    align-items: stretch;
+  }
+  @media (max-width: 880px) {
+    .bus-schedule-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .bus-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 24px 26px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow);
+  }
+  .bus-card-title {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    color: var(--forest-dark);
+    margin: 0 0 16px;
+    padding-bottom: 12px;
+    border-bottom: 1.5px solid var(--line);
+  }
+  .bus-table-wrap {
+    flex: 1;
+    overflow-x: auto;
+  }
+  .bus-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+  }
+  .bus-table th {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #5B6B5F;
+    padding: 8px 0 12px;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+  }
+  .bus-table td {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+    color: #3E5245;
+    vertical-align: middle;
+  }
+  .bus-table tr:last-child td {
+    border-bottom: none;
+  }
+  .bus-table .time-col {
+    text-align: right;
+    white-space: nowrap;
+    padding-left: 16px;
+    font-weight: 600;
+    color: var(--forest-dark);
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+  }
+  .bus-notice {
+    margin-top: 32px;
+    border-left: 3px solid var(--laterite);
+    background: var(--paper);
+    border-radius: 0 14px 14px 0;
+    padding: 20px 24px;
+  }
+  .bus-notice p {
+    margin: 0;
+    font-size: 14.5px;
+    color: #4A594D;
+    line-height: 1.6;
+  }
+  .bus-notice strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
   /* ---------- COMMITTEE / SUPPORT ---------- */
   /* ---------- COMMITTEE / SUPPORT ---------- */
   .committee-card-grid {
